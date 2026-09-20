@@ -1,0 +1,41 @@
+---
+// talaia.dev/certificate — the Certificate of Understanding, in the
+// DCO's format and nothing else. The text is read from the README's
+// only ```txt fence (the one place it is written) so the page can
+// never drift from the standard.
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+const entries = await getCollection('docs', ({ data }) => !data.draft);
+const body = entries.map((e) => e.body ?? '').join('\n');
+const m = body.match(/^```txt\n([\s\S]*?)\n```/m);
+if (!m) throw new Error('certificate.astro: no ```txt fence (the certificate) found in the README');
+const text = m[1];
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Certificate of Understanding — talaia</title>
+  <meta name="description" content="The Certificate of Understanding: what a person certifies by adding talaia.dev/certificate and their name to work made with an AI." />
+  <link rel="canonical" href="https://talaia.dev/certificate" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    body { margin: 0; padding: 48px 16px; background: #fff; color: #1a2238; }
+    pre { max-width: 66ch; margin: 0 auto; white-space: pre-wrap; background: none; border: 0;
+          padding: 0; font-size: 15px; line-height: 1.6; }
+    p { max-width: 66ch; margin: 40px auto 0; font-family: var(--sans); font-size: 14px; }
+    p.note { margin-top: 32px; font-size: 13px; opacity: .75; }
+    p.note + p { margin-top: 8px; }
+    p.note + p:not(.note) { margin-top: 16px; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+  <pre>{text}</pre>
+  <p class="note">Inspired by the <a href="https://developercertificate.org/">Developer Certificate of Origin</a>.</p>
+  <p class="note">Designed to support the human review and editorial responsibility of Article 50(4) of the <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj">EU AI Act</a>.</p>
+  <p><a href="/">talaia.dev</a></p>
+</body>
+</html>

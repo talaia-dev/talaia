@@ -1,0 +1,115 @@
+---
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Wordmark from '../components/Wordmark.astro';
+interface Props {
+  title: string;
+  description: string;
+  toc: { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
+}
+const { title, description, toc } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#1a2238" />
+  <link rel="alternate" type="text/plain" href="/llms.txt" title="Markdown version" />
+  <!-- Go vanity import path: `go install talaia.dev/cmd/talaia@latest` asks
+       https://talaia.dev/?go-get=1 and follows this to the repository. -->
+  <meta name="go-import" content="talaia.dev git https://github.com/talaia-dev/talaia" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="talaia" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content="https://talaia.dev/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script is:inline>
+    // Light by default, like a published standard; dark stays a choice.
+    document.documentElement.dataset.theme = localStorage.getItem('theme') ?? 'light';
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <a class="brand" href="/"><Logo size={20} /><Wordmark /></a>
+      <nav class="topnav" aria-label="Repository">
+        <a href="https://github.com/talaia-dev/talaia">GitHub</a>
+      </nav>
+      <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme">◐</button>
+    </div>
+  </header>
+  <slot name="hero" />
+  <div class="shell">
+    <aside class="toc">
+      <nav aria-label="On this page">
+        {toc.filter((g) => g.items.length > 0).map((g) => (
+          <div class="toc-part">
+            <p class="toc-part-label">{g.label}</p>
+            <ol>
+              {g.items.map((s) => <li><a href={`#${s.anchor}`}>{s.title}</a></li>)}
+            </ol>
+          </div>
+        ))}
+      </nav>
+    </aside>
+    <main>
+      <slot />
+      <footer class="site-foot">
+        <p class="foot-line"><a href="/certificate">talaia.dev/certificate</a> — <a href="https://www.linkedin.com/in/roger-p%C3%A9rez-parera-1b1458119/">Roger Pérez</a></p>
+        <nav class="foot-links" aria-label="Footer">
+          <a href="https://github.com/talaia-dev/talaia">GitHub</a>
+          <a href="/llms.txt">llms.txt</a>
+          {toc.slice(0, 2).map((g) => <a href={`#${g.anchor}`}>{g.label}</a>)}
+        </nav>
+      </footer>
+    </main>
+  </div>
+  <script is:inline>
+    // Scroll-spy: the index highlights the section whose heading was the
+    // last to pass under the top bar. Headings are the README's ## (the
+    // hidden "Introduction" ones included: absolute-positioned, but they
+    // keep their place in the flow).
+    (() => {
+      const links = new Map(
+        [...document.querySelectorAll('.toc a[href^="#"]')].map((a) => [a.getAttribute('href').slice(1), a])
+      );
+      const headings = [...document.querySelectorAll('.readme h2[id]')].filter((h) => links.has(h.id));
+      if (!headings.length) return;
+      let current = null, ticking = false;
+      const update = () => {
+        ticking = false;
+        const line = 96; // just under the sticky top bar
+        let active = headings[0];
+        for (const h of headings) {
+          if (h.getBoundingClientRect().top <= line) active = h; else break;
+        }
+        if (active === current) return;
+        if (current) links.get(current.id).removeAttribute('aria-current');
+        links.get(active.id).setAttribute('aria-current', 'true');
+        current = active;
+      };
+      const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+      addEventListener('scroll', onScroll, { passive: true });
+      addEventListener('resize', onScroll);
+      addEventListener('hashchange', onScroll);
+      update();
+    })();
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+  </script>
+</body>
+</html>

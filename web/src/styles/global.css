@@ -1,0 +1,256 @@
+/* talaia: a published standard's page.
+   White paper, one institutional colour — the brand navy — used as a
+   field for the hero and for links and emphasis; the fire's amber only
+   on the mark. Inter throughout, at regular weights and ordinary
+   tracking; the mono only where code is. Nothing moves. Dark is a
+   choice, not the default: the same page in the navy. */
+:root {
+  --navy: #1a2238; --cream: #faf6ef; --fire: #e8a33d;
+  --bg: #ffffff; --bg-alt: #f4f5f7; --fg: #343a46; --fg-dim: #66707f;
+  --fg-strong: #14192a; --accent: #1a2238; --accent-hover: #2e3a5c;
+  --border: #e2e5ea; --border-strong: #c4c9d2;
+  --sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --measure: 66ch;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --bg: #161c2e; --bg-alt: #1f2740; --fg: #c5cad6; --fg-dim: #8a92a6;
+  --fg-strong: #f3f4f7; --accent: #c9d2ec; --accent-hover: #ffffff;
+  --border: #2b3450; --border-strong: #3f4a6a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Inter's display cut for the large sizes. */
+.hero .tagline, .readme h1, .readme h2 { font-variation-settings: "opsz" 32; }
+:focus-visible { outline: 2px solid var(--fire); outline-offset: 3px; border-radius: 2px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-track { background: transparent; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--sans); font-size: 16px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: color-mix(in srgb, var(--fire) 35%, transparent); }
+/* Top bar: brand, the four parts, GitHub, theme. */
+.topbar { position: sticky; top: 0; z-index: 20; background: var(--bg);
+  border-bottom: 1px solid var(--border); }
+.topbar-in { max-width: 1040px; margin: 0 auto; padding: .8rem 1.5rem;
+  display: flex; align-items: center; gap: 1.5rem; }
+.topnav { display: flex; gap: 1.6rem; margin-left: auto; font-size: 14px; font-weight: 500; }
+.topnav a { color: var(--fg); text-decoration: none; }
+.topnav a:hover { color: var(--fg-strong); }
+/* The lockup: the tower on the name's baseline, as tall as the letters. */
+.brand, .lockup { display: inline-flex; align-items: baseline; gap: .42em;
+  font-weight: 600; line-height: 1; color: var(--fg-strong);
+  text-decoration: none; letter-spacing: -.01em; }
+.brand { font-size: 18px; }
+.brand .logo-mark, .lockup .logo-mark { height: .98em; width: auto; }
+.logo-mark { color: currentColor; flex: none; }
+.logo-mark .beacon { fill: var(--fire); }
+/* The in-text wordmark (set by satteri-wordmark at build time): the
+   name, firm, in the running text. */
+.readme .wm { font-weight: 600; color: var(--fg-strong); }
+#theme-toggle { background: none; border: 1px solid var(--border);
+  border-radius: 4px; color: var(--fg-dim); font: inherit; font-size: 14px;
+  line-height: 1; padding: .3rem .45rem; cursor: pointer; }
+#theme-toggle:hover { color: var(--fg-strong); border-color: var(--border-strong); }
+
+/* The hero: a band in the navy, the sheet's negative — cream tower,
+   white name — with the standard's status and the one-line claim. */
+.hero { background: var(--navy); color: #fff; }
+.hero-in { max-width: 1040px; margin: 0 auto; padding: 3.6rem 1.5rem 3.4rem; }
+.hero .lockup { font-size: 1.9rem; color: #fff; }
+.hero .logo-mark { color: var(--cream); }
+.hero-status { margin: 1.1rem 0 0; font-size: 12px; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: rgba(250,246,239,.62); }
+.hero .tagline { font-family: var(--sans); font-weight: 600; font-size: 2.75rem; line-height: 1.12;
+  letter-spacing: -.02em; color: #fff; margin: 1.4rem 0 1rem; max-width: 26ch; }
+.hero-sub { color: rgba(250,246,239,.74); font-size: 1.08rem; line-height: 1.55;
+  max-width: 58ch; margin: 0 0 1.7rem; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: .7rem; margin: 0; }
+.hero-seal { margin: 1.6rem 0 0; font-size: 13.5px; color: rgba(250,246,239,.62); }
+.btn { display: inline-flex; align-items: center; padding: .6rem 1.1rem;
+  border: 1px solid rgba(255,255,255,.5); border-radius: 4px;
+  font-size: 14.5px; font-weight: 500; color: #fff; text-decoration: none;
+  transition: border-color .15s, background .15s, color .15s; }
+.btn:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+.btn-primary { background: #fff; color: var(--navy); border-color: #fff; }
+.btn-primary:hover { background: var(--cream); border-color: var(--cream); color: var(--navy); }
+/* Dark: the page goes navy, so the hero band goes light — the same
+   inversion, kept as one block so the two themes stay mirror images. */
+:root[data-theme='dark'] .hero { background: var(--cream); color: var(--navy); }
+:root[data-theme='dark'] .hero .lockup, :root[data-theme='dark'] .hero .tagline { color: var(--navy); }
+:root[data-theme='dark'] .hero .logo-mark { color: var(--navy); }
+:root[data-theme='dark'] .hero-sub, :root[data-theme='dark'] .hero-status,
+:root[data-theme='dark'] .hero-seal { color: rgba(26,34,56,.72); }
+:root[data-theme='dark'] .btn { color: var(--navy); border-color: rgba(26,34,56,.45); }
+:root[data-theme='dark'] .btn:hover { border-color: var(--navy); background: rgba(26,34,56,.06); }
+:root[data-theme='dark'] .btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+:root[data-theme='dark'] .btn-primary:hover { background: var(--accent-hover); color: var(--navy); border-color: var(--accent-hover); }
+
+.shell { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 3.5rem;
+  max-width: 1040px; margin: 0 auto; padding: 2.8rem 1.5rem 3rem; }
+
+/* The index: parts as numbered overlines, sections beneath. */
+.toc { position: sticky; top: 4.6rem; align-self: start; font-size: 13.5px;
+  counter-reset: toc-part; }
+.toc-part { counter-increment: toc-part; }
+.toc-part + .toc-part { margin-top: 1.4rem; }
+.toc-part-label { margin: 0 0 .4rem; font-size: 11.5px; font-weight: 600;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--fg-dim); }
+.toc-part-label::before { content: counter(toc-part); margin-right: .6em; color: var(--fg-strong); }
+.toc ol { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--border); }
+.toc li a { display: block; padding: .24rem .85rem; color: var(--fg-dim);
+  text-decoration: none; border-left: 2px solid transparent; margin-left: -1px; }
+.toc li a:hover { color: var(--fg-strong); }
+.toc li a[aria-current="true"] { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+
+
+.readme { counter-reset: part; }
+.readme > :first-child { margin-top: 0; }
+.readme p, .readme ul, .readme ol, .readme blockquote, .readme table { max-width: var(--measure); }
+.readme p, .readme ul, .readme ol { margin: .9em 0; }
+/* The overview: everything the README says before its first part — a
+   lede, the core as ruled rows, one closing line. Selected by position
+   (nothing before it is preceded by an h1), so the markdown stays plain. */
+.readme > p:first-child { font-size: 1.22rem; line-height: 1.5; color: var(--fg-strong); }
+.readme > p:first-child::before { content: "Overview"; display: block;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--fg-dim); margin-bottom: 1.1rem; }
+.readme > ul:not(h1 ~ *) { list-style: none; padding: 0; margin: 1.6rem 0;
+  border-top: 1px solid var(--border); max-width: var(--measure); }
+.readme > ul:not(h1 ~ *) > li { margin: 0; padding: .9rem 0;
+  border-bottom: 1px solid var(--border); color: var(--fg-dim); }
+.readme > ul:not(h1 ~ *) > li > strong { display: block; font-weight: 600;
+  font-size: 1.02rem; color: var(--fg-strong); margin-bottom: .15rem; }
+.readme > ul:not(h1 ~ *) + p { color: var(--fg-strong); }
+/* A part: its number and title on one line, after a hairline. */
+.readme h1 { font-weight: 600; font-size: 2.1rem; color: var(--fg-strong);
+  letter-spacing: -.02em; line-height: 1.15; border-top: 1px solid var(--border);
+  padding-top: 2.4rem; margin: 4.5rem 0 1.3rem; scroll-margin-top: 1.5rem;
+  counter-increment: part; }
+.readme h1::before { content: counter(part); margin-right: .55em; color: var(--fg-dim); font-weight: 500; }
+.readme h1 + h2 { margin-top: 1.4rem; }
+/* "Introduction" headings exist for the index only: present in the flow
+   (so the anchor scrolls to the right place), invisible on the page. */
+.readme h2[id^="introduction"] { position: absolute; width: 1px; height: 1px;
+  margin: 0; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.readme ul, .readme ol { padding-left: 1.5em; }
+.readme li { margin: .3em 0; }
+.readme li::marker { color: var(--fg-dim); }
+.readme pre { font-size: 13px; }
+/* The two towers: the manifesto's identity paragraph, framed in one
+   enclosed block with its illustration (set by satteri-towers at build
+   time), drawn in two halves across the adjacent siblings. */
+.towers { border: 1px solid var(--border); border-bottom: 0; border-radius: 4px 4px 0 0;
+  background: var(--bg-alt); max-width: var(--measure);
+  padding: 1.4rem 1.5rem .1rem; margin: 2rem 0 0; color: var(--fg-strong); }
+.readme p.towers-text { border: 1px solid var(--border); border-top: 0;
+  border-radius: 0 0 4px 4px; background: var(--bg-alt);
+  padding: .9rem 1.5rem 1.3rem; margin: 0 0 1.6rem; }
+.towers svg { display: block; width: 250px; height: 78px; max-width: 100%; overflow: visible; }
+.towers .babel { opacity: .38; }
+.towers .sea { opacity: .45; }
+.towers .fire { fill: var(--fire); }
+.towers .cap { font: 600 9.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; fill: var(--fg-dim); }
+
+/* The manifesto pairs: a two-column comparison between two rules, ruled
+   like a table. The paragraph is "<strong>left</strong> over right<br>…". */
+.readme p:has(> strong:first-child):has(> br) { display: grid;
+  grid-template-columns: max-content minmax(0, 1fr); column-gap: 2rem; row-gap: 0;
+  align-items: baseline; padding: 0; margin: 1.6rem 0;
+  border-top: 1px solid var(--border); color: var(--fg-dim); }
+.readme p:has(> strong:first-child):has(> br) > br { display: none; }
+.readme p:has(> strong:first-child):has(> br) > strong,
+.readme p:has(> strong:first-child):has(> br) > strong + * { padding: .7rem 0;
+  border-bottom: 1px solid var(--border); }
+.readme p:has(> strong:first-child):has(> br) > strong { font-weight: 600;
+  font-size: 1.02rem; line-height: 1.3; color: var(--fg-strong); }
+/* "The project": the four things as cards. */
+#the-project + p + ul { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem;
+  list-style: none; padding: 0; max-width: none; }
+#the-project + p + ul > li { margin: 0; padding: 1rem 1.15rem 1.05rem;
+  border: 1px solid var(--border); border-radius: 4px; background: var(--bg-alt); font-size: .95em; }
+#the-project + p + ul > li > strong { display: block; font-weight: 600; font-size: 1.02rem; margin-bottom: .3rem; }
+.readme h2 { font-weight: 600; font-size: 1.45rem; color: var(--fg-strong);
+  letter-spacing: -.015em; line-height: 1.25; margin: 3rem 0 1rem; scroll-margin-top: 1.5rem; }
+.readme h3 { font-weight: 600; font-size: 1.1rem; color: var(--fg-strong); margin: 2rem 0 .7rem; }
+.readme strong { color: var(--fg-strong); font-weight: 600; }
+
+a { color: var(--accent); text-decoration: underline; text-decoration-color: var(--border-strong);
+  text-underline-offset: .18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--accent-hover); text-decoration-color: currentColor; }
+code, pre, kbd, samp { font-family: var(--mono); }
+code { background: var(--bg-alt); border: 1px solid var(--border); padding: .06em .32em; border-radius: 3px; font-size: .86em; }
+pre { background: var(--bg-alt) !important; border: 1px solid var(--border); border-radius: 4px;
+  padding: .9rem 1.1rem; overflow-x: auto; line-height: 1.55; }
+pre code { background: none; border: 0; padding: 0; font-size: inherit; }
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+}
+/* The Certificate of Understanding — the page's one ```txt fence —
+   renders like developercertificate.org: black text on a white sheet,
+   in both themes. */
+.readme pre[data-language='txt'] { background: #fff !important; border-color: #d0d7de; }
+:root .readme pre[data-language='txt'],
+:root .readme pre[data-language='txt'] span {
+  color: #24292e !important; font-style: normal !important; font-weight: 400 !important; }
+/* A blockquote is a rule: the statement worth stopping on, with the
+   navy bar of a callout. */
+blockquote { margin: 1.8em 0 .6em; padding: .15rem 0 .15rem 1.1rem;
+  border-left: 3px solid var(--accent); font-size: 1.18rem; line-height: 1.35;
+  font-weight: 600; letter-spacing: -.012em; color: var(--fg-strong); }
+blockquote p { margin: 0; }
+/* The gloss under a rule reads as its quiet second voice. */
+blockquote + p { margin-top: 0; color: var(--fg-dim); }
+table { border-collapse: collapse; width: 100%; font-size: .9em; line-height: 1.5; }
+th, td { border: 0; border-bottom: 1px solid var(--border); padding: .6rem .6rem; text-align: left; vertical-align: top; }
+th { color: var(--fg-dim); font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+th strong { color: var(--fg-strong); font-weight: 600; }
+
+.site-foot { margin-top: 5rem; padding-top: 1.6rem; border-top: 1px solid var(--border);
+  color: var(--fg-dim); font-size: 13.5px; display: grid; gap: .5rem; }
+.foot-line { margin: 0; max-width: 60ch; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 1.2rem; margin-top: .3rem; }
+.site-foot a { color: var(--fg-dim); text-decoration: none; }
+.site-foot a:hover { color: var(--fg-strong); }
+
+@media (max-width: 800px) {
+  .hero-in { padding: 2.6rem 1.1rem 2.4rem; }
+  .hero .tagline { font-size: 2.1rem; }
+  .shell { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; padding: 2rem 1.1rem 2.5rem; }
+  .toc { position: static; order: 2; margin-top: 2rem; }   /* content first on phones */
+  .topnav { display: none; }
+  #the-project + p + ul { grid-template-columns: 1fr; }
+  .readme p:has(> strong:first-child):has(> br) { grid-template-columns: 1fr; }
+  .readme p:has(> strong:first-child):has(> br) > strong { padding-bottom: 0; border-bottom: 0; }
+  .readme p:has(> strong:first-child):has(> br) > strong + * { padding-top: .15rem; }
+}
+
+/* Footnotes (GFM): the "Inspired by…" notes at the foot of the page.
+   The generated "Footnotes" heading is screen-reader-only; the list is
+   quiet and small, set off by a hairline. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.footnotes { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border);
+  font-size: .85em; color: var(--fg-dim); }
+.footnotes p { margin: .2em 0; }
+sup a[data-footnote-ref] { text-decoration: none; font-weight: 600; }
+
+@media print {
+  .topbar, .toc, .hero-cta, .site-foot nav { display: none !important; }
+  .hero { background: none; color: #111; }
+  .hero .tagline, .hero .lockup { color: #111; }
+  .shell { display: block; padding: 0; }
+  body { background: #fff; color: #111; }
+  .readme h2[id^="introduction"] { position: static; width: auto; height: auto; clip: auto; }
+  a { color: inherit; text-decoration: underline; }
+}

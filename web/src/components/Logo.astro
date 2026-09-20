@@ -1,0 +1,24 @@
+---
+// The talaia mark — the definitive one, adopted from the brand sheet
+// (web/brand/logo_talaia_negativo_variantes.svg): a machicolated
+// watchtower with its door, and the signal fire as a single free
+// pixel above. Tower follows currentColor (standard/negative come for
+// free); the door is a hole, so any background shows through; the
+// fire is the brand amber via .beacon / --fire.
+//
+// Native geometry, 60×78 units, kept as the viewBox with no padding:
+// the tower's foot is the bottom edge of the box, so in a lockup with
+// `align-items: baseline` the tower stands on the word's baseline.
+// `size` is the height; the width follows.
+interface Props { size?: number }
+const { size = 20 } = Astro.props;
+const width = Math.round((size * 60) / 78 * 100) / 100;
+---
+<svg class="logo-mark" width={width} height={size} viewBox="0 0 60 78" aria-hidden="true">
+  <rect class="beacon" x="24" y="0" width="12" height="12" />
+  <path
+    fill="currentColor"
+    fill-rule="evenodd"
+    d="M0 18h12v12H0zM24 18h12v12H24zM48 18h12v12H48zM0 30h60v12H0zM6 42h48v36H6zM14 49h8v13h-8z"
+  />
+</svg>

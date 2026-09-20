@@ -1,0 +1,19 @@
+- mirar development loop.
+
+- revisar articulos tipo coderabbit y otros que ha ido pasando. e incorporar en manifesto
+
+- SEO, llms.txt, etc.
+
+- AGENTS.md mucho mas bullet points, que incorpore las reglas del manifesto
+
+- PENDIENTE (2026-09-11): centrar README y web en el Certificate of
+  Understanding. Jerarquía: Manifiesto > Certificado > Framework (que
+  lo incluye) > CLI y `git commit -s` (que lo ejecutan). Plan acordado,
+  sin aplicar: overview con lede sobre el certificado y cuatro filas
+  (manifiesto / certificado / framework / herramienta+flag); nueva
+  parte 2 `# The Certificate of Understanding` (texto del certificado,
+  las cuatro cláusulas, origen DCO, dónde se pide) movida desde Sign;
+  Sign remite a ella; "The project" = manifiesto / certificado /
+  método / herramienta; hero: lema igual, subtítulo sobre el
+  certificado. Decisiones abiertas: ¿lema nuevo? ¿certificado
+  duplicado en Sign o una sola fuente?

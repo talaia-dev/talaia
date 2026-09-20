@@ -1,0 +1,49 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
+import Wordmark from '../components/Wordmark.astro';
+
+const entries = (await getCollection('docs', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const sections = await Promise.all(entries.map((e) => render(e)));
+
+// Sidebar: one group per `#` part of the README (Manifesto, Framework,
+// Using talaia, Contributing), each listing its `##` sections. Derived
+// from the rendered headings, so renaming a section never breaks the
+// grouping; only a `##` before the first `#` would end up ungrouped.
+const toc = [] as { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
+for (const { headings } of sections) {
+  for (const h of headings) {
+    if (h.slug === 'footnote-label') continue;   // the footnotes' own (hidden) h2, not a section
+    if (h.depth === 1) toc.push({ label: h.text, anchor: h.slug, items: [] });
+    else if (h.depth === 2 && toc.length) toc[toc.length - 1].items.push({ anchor: h.slug, title: h.text });
+  }
+}
+---
+<Base
+  title="talaia — human in command"
+  description="A human-in-command accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest."
+  toc={toc}
+>
+  <header class="hero" slot="hero">
+    <div class="hero-in">
+      <div class="lockup"><Logo size={30} /><Wordmark /></div>
+      <h1 class="tagline">You direct. The AI builds.<br />Your name answers for it.</h1>
+      <p class="hero-sub">Talaia is a human-in-command standard for work done with AI, and
+        its whole claim fits in one line: the machine may produce the work;
+        only a person can answer for it. It gives that person a certificate to sign — under a
+        published post, at the foot of a report, in a commit — and a
+        method that makes the signature honest.</p>
+      <p class="hero-cta">
+        <a class="btn btn-primary" href="#the-instruments-rules">Get started</a>
+        <a class="btn" href="#introduction">Read the manifesto</a>
+      </p>
+    </div>
+  </header>
+
+  <article class="readme">
+    {sections.map(({ Content }) => <Content />)}
+  </article>
+</Base>

@@ -1,0 +1,68 @@
+name: 'talaia audit'
+description: >-
+  Verify the talaia standard on a pull request — Signed-off-by (the
+  Certificate of Understanding), Assisted-by, story ids and the size
+  budget — read-only, from git history. The DCO model, one level up.
+branding:
+  icon: 'shield'
+  color: 'orange'
+
+inputs:
+  range:
+    description: >-
+      Commit range to audit (git log syntax). Defaults to the pull
+      request's own commits; outside a pull request, everything
+      reachable from HEAD.
+    required: false
+    default: ''
+  budget:
+    description: 'Size budget in changed lines per commit (advisory).'
+    required: false
+    default: '300'
+  strict:
+    description: 'Fail when a commit is unsigned or has no story id.'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: ${{ github.action_path }}/go.mod
+        cache: false
+
+    - name: Build talaia
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: go build -o "${RUNNER_TEMP}/talaia" ./cmd/talaia
+
+    - name: Audit
+      shell: bash
+      env:
+        RANGE: ${{ inputs.range }}
+        BUDGET: ${{ inputs.budget }}
+        STRICT: ${{ inputs.strict }}
+        BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      run: |
+        set -o pipefail
+        range="$RANGE"
+        if [ -z "$range" ] && [ -n "$BASE_SHA" ]; then
+          range="${BASE_SHA}..${HEAD_SHA}"
+        fi
+        args=()
+        [ -n "$range" ] && args+=("$range")
+        args+=(--budget "$BUDGET")
+        [ "$STRICT" = "true" ] && args+=(--strict)
+
+        echo "## talaia audit" >> "$GITHUB_STEP_SUMMARY"
+        echo '```' >> "$GITHUB_STEP_SUMMARY"
+        status=0
+        "${RUNNER_TEMP}/talaia" audit "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY" || status=$?
+        echo '```' >> "$GITHUB_STEP_SUMMARY"
+        if [ "$status" -ne 0 ]; then
+          echo "::error::talaia audit failed: a commit is unsigned or has no story id (see the job summary)"
+        fi
+        exit "$status"

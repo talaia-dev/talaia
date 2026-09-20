@@ -1,0 +1,104 @@
+---
+// talaia.dev/how-to-agentsmd — where each AI tool reads its
+// instructions, and how to point it at AGENTS.md. Straight to the
+// point; the official page for each tool is linked.
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How to install AGENTS.md — talaia</title>
+  <meta name="description" content="Where each AI tool reads its instructions and how to point it at AGENTS.md: Claude Code, Codex, Gemini CLI, Cursor, GitHub Copilot, Windsurf, Aider, and the chat apps." />
+  <link rel="canonical" href="https://talaia.dev/how-to-agentsmd" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    body { margin: 0; padding: 48px 16px; background: #fff; color: #1a2238; font-family: var(--sans); }
+    main { max-width: 66ch; margin: 0 auto; font-size: 15px; line-height: 1.6; }
+    h1 { font-size: 22px; font-weight: 600; margin: 0 0 12px; }
+    h2 { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin: 40px 0 8px; opacity: .7; }
+    h3 { font-size: 15px; font-weight: 600; margin: 24px 0 4px; }
+    p { margin: 0 0 8px; }
+    pre { margin: 8px 0; padding: 10px 12px; background: #f4f5f7; border: 0; border-radius: 4px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; }
+    code { font-size: 13px; }
+    a { color: inherit; }
+    .docs { font-size: 13px; opacity: .75; }
+    .home { margin-top: 48px; font-size: 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>How to install AGENTS.md</h1>
+  <p>Get the file at <a href="/agentsmd">talaia.dev/agentsmd</a> and save it as
+    <code>AGENTS.md</code> at the root of your repository. Each tool reads it from
+    a different place; this page says where.
+    <code>AGENTS.md</code> is an <a href="https://agents.md/">open format</a>,
+    so most coding agents read it as is.</p>
+
+  <h2>Coding agents — in the terminal, the editor, or the cloud</h2>
+
+  <h3>Codex (CLI, IDE extension, cloud)</h3>
+  <p>Reads <code>AGENTS.md</code> at the root of the repository. Nothing to do.</p>
+  <p class="docs">Docs: <a href="https://developers.openai.com/codex/guides/agents-md">Custom instructions with AGENTS.md</a></p>
+
+  <h3>Claude Code</h3>
+  <p>Reads <code>CLAUDE.md</code>, not <code>AGENTS.md</code>. Create a
+    <code>CLAUDE.md</code> at the root, next to <code>AGENTS.md</code>, with one
+    line that imports it:</p>
+  <pre>@AGENTS.md</pre>
+  <p class="docs">Docs: <a href="https://code.claude.com/docs/en/memory">How Claude remembers your project</a></p>
+
+  <h3>Gemini CLI</h3>
+  <p>Reads <code>GEMINI.md</code> by default. Tell it to read the
+    <code>AGENTS.md</code> at the root instead, in
+    <code>.gemini/settings.json</code>:</p>
+  <pre>{"{"} "context": {"{"} "fileName": "AGENTS.md" {"}"} {"}"}</pre>
+  <p class="docs">Docs: <a href="https://geminicli.com/docs/cli/gemini-md/">Provide context with GEMINI.md files</a></p>
+
+  <h3>Cursor</h3>
+  <p>Reads <code>AGENTS.md</code> at the project root, in the editor and in
+    the CLI, alongside any <code>.cursor/rules</code>. Nothing to do.</p>
+  <p class="docs">Docs: <a href="https://cursor.com/docs/rules">Rules</a></p>
+
+  <h3>GitHub Copilot (coding agent, CLI, VS Code)</h3>
+  <p>Reads <code>AGENTS.md</code> at the repository root, next to
+    <code>.github/copilot-instructions.md</code> if you have one. Nothing to do.</p>
+  <p class="docs">Docs: <a href="https://docs.github.com/copilot/customizing-copilot/adding-custom-instructions-for-github-copilot">Adding repository custom instructions</a></p>
+
+  <h3>Windsurf</h3>
+  <p>Reads <code>AGENTS.md</code> at the root as an always-on rule. Nothing to do.</p>
+  <p class="docs">Docs: <a href="https://docs.windsurf.com/windsurf/cascade/agents-md">AGENTS.md</a></p>
+
+  <h3>Aider</h3>
+  <p>Reads <code>CONVENTIONS.md</code> by default. Point it at the
+    <code>AGENTS.md</code> at the root, in <code>.aider.conf.yml</code>:</p>
+  <pre>read: AGENTS.md</pre>
+  <p>or per session with <code>aider --read AGENTS.md</code>.</p>
+  <p class="docs">Docs: <a href="https://aider.chat/docs/usage/conventions.html">Specifying coding conventions</a></p>
+
+  <h2>Chat apps — no repository</h2>
+  <p>Paste the text of the file as the instructions of a project or a custom
+    assistant, so it is read on every turn. Its git rules will not apply
+    there; the rest does.</p>
+
+  <h3>ChatGPT</h3>
+  <p>Open a project and click <em>Add instructions</em>. For every chat,
+    Settings → Personalization → Custom instructions.</p>
+  <p class="docs">Docs: <a href="https://help.openai.com/en/articles/10169521-projects-in-chatgpt">Projects in ChatGPT</a> · <a href="https://help.openai.com/en/articles/8096356-chatgpt-custom-instructions">Custom instructions</a></p>
+
+  <h3>Claude</h3>
+  <p>Open a project and set its <em>project instructions</em>.</p>
+  <p class="docs">Docs: <a href="https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects">How can I create and manage projects?</a></p>
+
+  <h3>Gemini</h3>
+  <p>Create a Gem (web app only) and put the text in its instructions. For
+    every chat, Settings → <em>Instructions for Gemini</em>.</p>
+  <p class="docs">Docs: <a href="https://support.google.com/gemini/answer/15235603">Tips for creating custom Gems</a> · <a href="https://support.google.com/gemini/answer/16598625">Customize Gemini's responses with your instructions</a></p>
+
+  <p class="home"><a href="/">talaia.dev</a></p>
+</main>
+</body>
+</html>

@@ -1,0 +1,7 @@
+---
+// The wordmark: "talaia", lowercase, in the site's sans at a firm weight.
+// The accessible name stays "talaia".
+interface Props { as?: 'h1' | 'span'; class?: string }
+const { as: Tag = 'span', class: cls } = Astro.props;
+---
+<Tag class={cls}>talaia</Tag>

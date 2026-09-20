@@ -1,0 +1,15 @@
+# talaia · the check that enforces the standard on every pull request:
+# each commit must carry Signed-off-by (the Certificate of
+# Understanding), a story id, and stay within the size budget.
+# Make it required under Settings → Branches and the convention
+# becomes mechanical: no signature, no merge.
+name: talaia
+on: pull_request
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # the audit reads git history
+      - uses: talaia-dev/talaia@main   # pin a tag once you depend on it

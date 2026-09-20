@@ -1,0 +1,109 @@
+---
+// talaia.dev/how-to-pr-check — where the pull request check goes on
+// each forge, and how to make it required. Straight to the point; the
+// official page for each forge is linked.
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How to install the pull request check — talaia</title>
+  <meta name="description" content="Where the talaia pull request check goes on GitHub, Gitea, GitLab and Bitbucket, and how to make it required: no Signed-off-by, no merge." />
+  <link rel="canonical" href="https://talaia.dev/how-to-pr-check" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    body { margin: 0; padding: 48px 16px; background: #fff; color: #1a2238; font-family: var(--sans); }
+    main { max-width: 66ch; margin: 0 auto; font-size: 15px; line-height: 1.6; }
+    h1 { font-size: 22px; font-weight: 600; margin: 0 0 12px; }
+    h2 { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin: 40px 0 8px; opacity: .7; }
+    h3 { font-size: 15px; font-weight: 600; margin: 24px 0 4px; }
+    p { margin: 0 0 8px; }
+    pre { margin: 8px 0; padding: 10px 12px; background: #f4f5f7; border: 0; border-radius: 4px; font-size: 13px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+    code { font-size: 13px; }
+    a { color: inherit; }
+    .docs { font-size: 13px; opacity: .75; }
+    .home { margin-top: 48px; font-size: 14px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>How to install the pull request check</h1>
+  <p>The check is one file, at <a href="/pr-check">talaia.dev/pr-check</a>. On
+    every pull request it reads the commits and fails if one is unsigned or
+    has no story id. Two steps on every forge: put the file where the forge
+    runs it, then make the check required, so that no signature means no
+    merge.</p>
+
+  <h2>GitHub</h2>
+  <h3>1. The file</h3>
+  <p>Save it as <code>.github/workflows/talaia.yml</code> and commit. The next
+    pull request shows a check named <code>audit</code>.</p>
+  <h3>2. Make it required</h3>
+  <p>Settings → Branches → add a branch protection rule for
+    <code>main</code> → <em>Require status checks to pass before merging</em>
+    → pick <code>audit</code>. Or from the terminal:</p>
+  <pre is:raw>gh api -X PUT "repos/{owner}/{repo}/branches/main/protection" \
+  --input - &lt;&lt;'EOF'
+{"required_status_checks":{"strict":false,"checks":[{"context":"audit"}]},
+ "enforce_admins":false,"required_pull_request_reviews":null,"restrictions":null}
+EOF</pre>
+  <p class="docs">Docs: <a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule">Managing a branch protection rule</a></p>
+
+  <h2>Gitea / Forgejo</h2>
+  <h3>1. The file</h3>
+  <p>Same file, at <code>.gitea/workflows/talaia.yml</code>. Gitea Actions
+    runs GitHub workflows; if the runner cannot resolve the action by its
+    short name, write it in full:
+    <code>uses: https://github.com/talaia-dev/talaia@main</code>.</p>
+  <h3>2. Make it required</h3>
+  <p>Settings → Branches → protect <code>main</code> → <em>Enable status
+    check</em> → pick <code>audit</code>.</p>
+  <p class="docs">Docs: <a href="https://docs.gitea.com/usage/actions/comparison/">Gitea Actions compared to GitHub Actions</a></p>
+
+  <h2>GitLab</h2>
+  <h3>1. The job</h3>
+  <p>No workflow file: a job in <code>.gitlab-ci.yml</code> that installs the
+    tool and audits the merge request's commits.</p>
+  <pre is:raw>talaia:
+  image: golang:1.23
+  variables:
+    GIT_DEPTH: 0
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - go install talaia.dev/cmd/talaia@latest
+    - talaia audit --strict "$CI_MERGE_REQUEST_DIFF_BASE_SHA..HEAD"</pre>
+  <h3>2. Make it required</h3>
+  <p>Settings → Merge requests → Merge checks → <em>Pipelines must
+    succeed</em>.</p>
+  <p class="docs">Docs: <a href="https://docs.gitlab.com/user/project/merge_requests/auto_merge">Merge requests: pipelines must succeed</a></p>
+
+  <h2>Bitbucket</h2>
+  <h3>1. The step</h3>
+  <p>A pull request step in <code>bitbucket-pipelines.yml</code>, against the
+    destination branch.</p>
+  <pre is:raw>pipelines:
+  pull-requests:
+    '**':
+      - step:
+          image: golang:1.23
+          clone:
+            depth: full
+          script:
+            - go install talaia.dev/cmd/talaia@latest
+            - git fetch origin "$BITBUCKET_PR_DESTINATION_BRANCH"
+            - talaia audit --strict "origin/$BITBUCKET_PR_DESTINATION_BRANCH..HEAD"</pre>
+  <h3>2. Make it required</h3>
+  <p>Repository settings → Branch restrictions → <code>main</code> →
+    <em>Check for at least 1 passing build</em>. Enforced merge checks are a
+    Premium feature; without them the check is a warning.</p>
+  <p class="docs">Docs: <a href="https://support.atlassian.com/bitbucket-cloud/docs/suggest-or-require-checks-before-a-merge/">Suggest or require checks before a merge</a></p>
+
+  <p class="home"><a href="/">talaia.dev</a></p>
+</main>
+</body>
+</html>
