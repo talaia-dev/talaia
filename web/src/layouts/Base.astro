@@ -30,10 +30,17 @@ const { title, description, toc } = Astro.props;
   <meta property="og:site_name" content="talaia" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
   <meta property="og:image" content="https://talaia.dev/og.png" />
+  <meta property="og:image:secure_url" content="https://talaia.dev/og.png" />
+  <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="talaia — You direct. The AI builds. Your name answers for it." />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content="https://talaia.dev/og.png" />
   <script is:inline>
     // Light by default, like a published standard; dark stays a choice.
     document.documentElement.dataset.theme = localStorage.getItem('theme') ?? 'light';

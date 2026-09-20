@@ -1,0 +1,5 @@
+# Cloudflare Pages: HTTP redirects for the two file addresses, so link
+# previews and crawlers follow them (the meta-refresh pages Astro also
+# emits stay as the fallback on any other host).
+/agentsmd  https://github.com/talaia-dev/talaia/blob/main/internal/modules/scaffold/templates/AGENTS.md  301
+/pr-check  https://github.com/talaia-dev/talaia/blob/main/internal/modules/scaffold/templates/talaia-workflow.yml  301
