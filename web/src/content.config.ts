@@ -7,11 +7,9 @@ const docs = defineCollection({
     base: './src/content/docs',
     retainBody: true,          // necesario para /llms.txt
   }),
+  // The README carries no frontmatter: the site derives everything from
+  // its headings, and GitHub would render the block as a table.
   schema: z.object({
-    title: z.string(),
-    order: z.number(),
-    anchor: z.string(),
-    summary: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

@@ -2,8 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async () => {
-  const entries = (await getCollection('docs', ({ data }) => !data.draft))
-    .sort((a, b) => a.data.order - b.data.order);
+  const entries = await getCollection('docs', ({ data }) => !data.draft);
 
   const body = [
     '# talaia',

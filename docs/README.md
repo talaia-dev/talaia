@@ -1,10 +1,3 @@
----
-title: What is talaia
-order: 1
-anchor: what-is-talaia
-summary: "A human-in-command accountability standard for work done with AI: a certificate a person signs, a method that makes the signature honest, and a tool that installs it for software."
----
-
 # Manifesto
 
 ## Introduction
