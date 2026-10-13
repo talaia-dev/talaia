@@ -48,8 +48,8 @@ import '../styles/global.css';
 <main>
   <h1>How to install the pull request check</h1>
   <p>The check is one file, at <a href="/pr-check">talaia.dev/pr-check</a>. On
-    every pull request it reads the commits and fails if one is unsigned or
-    has no story id. Two steps on every forge: put the file where the forge
+    every pull request it reads the commits and fails if one is unsigned; a
+    missing story id is only reported. Two steps on every forge: put the file where the forge
     runs it, then make the check required, so that no signature means no
     merge.</p>
 

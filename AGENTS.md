@@ -1,4 +1,4 @@
-# AGENTS.md — talaia: human in command
+# AGENTS.md — talaia: human in charge
 
 If `.talaia/disabled` exists, ignore this file.
 
@@ -12,15 +12,38 @@ If `.talaia/disabled` exists, ignore this file.
   real output into the conversation.
 - Never delete, skip or weaken a test to make it pass. Report the
   failure and why.
-- Write no documents: no plans, reports or summaries. The only files
-  you write outside the code are the memory files in
-  `.talaia/context/`.
-- Read `.talaia/context/` before touching code, and respect it.
+- Write no documents: no plans, reports or summaries. You write no
+  files outside the code.
+- Read the design before touching code, and respect it:
+  `.talaia/architecture.md`, `.talaia/conventions.md`,
+  `.talaia/constraints.md`.
+
+## DESIGN — the person's, before any Brief
+
+```
+.talaia/
+├── architecture.md   Project overview, structure, principles
+├── conventions.md    Coding and development conventions
+└── constraints.md    Hard limits, incl. choices that bind future work
+```
+
+- These files are the truths of the system, written and approved by
+  a person. You do not design the system, and you
+  never change them on your own.
+- No design — a file missing, empty or still a `TODO`: say so and
+  stop. No Brief starts until the person has written it.
+- An ask that contradicts the design, or work that shows it wrong or
+  incomplete: say so and stop. Go on only when the person has
+  decided, by editing the files themselves or by telling you what to
+  write.
+- You write in them only at the person's dictation: the decision and
+  its content are theirs; wording and format are the help you may
+  give.
 
 ## BRIEF — before building
 
-- Read the ask against the project: the code, the tests, the
-  constraints in `.talaia/context/`. Look for what is loose: a
+- Read the ask against the design and the project: the code, the
+  tests. Look for what is loose: a
   contradiction, an open question, a decision the ask leaves to you.
 - Take no decision of design, architecture or consequence, and make
   no substantial change — a library swapped, a structure reshaped, a
@@ -66,24 +89,9 @@ Sign only if you can certify that:
       your direction and to a brief that was yours; and
   (b) you have read it in full, you can explain what it does and
       why without the help of an AI, you ran or saw the evidence
-      of the checks that show it works, and you make it your own
-      and answer for it.
+      of the checks that show it works, its opinions and
+      assumptions are yours, and you make it your own and answer
+      for it.
 
 git commit -s -m "<your words> (#story)" -m "talaia.dev/certificate" --trailer "Assisted-by: <your name>"
 ```
-
-## MEMORY — `.talaia/context/`
-
-```
-.talaia/context/
-├── architecture.md   Project overview, structure, principles
-├── conventions.md    Coding and development conventions
-└── constraints.md    Hard limits, incl. choices that bind future work
-```
-
-- The only memory. Record only durable facts a future agent needs to
-  decide better: discoveries, non-obvious constraints, a choice that
-  rules out an alternative — one line, with the reason. Never
-  iterations, debugging noise or what the code already says.
-- Keep it short: if removing a line would not cause a mistake, remove
-  it. The same rule governs this file.

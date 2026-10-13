@@ -36,7 +36,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 ::selection { background: color-mix(in srgb, var(--fire) 35%, transparent); }
-/* Top bar: brand, the four parts, GitHub, theme. */
+/* Top bar: brand, the three tabs, GitHub, theme, language. */
 .topbar { position: sticky; top: 0; z-index: 20; background: var(--bg);
   border-bottom: 1px solid var(--border); }
 .topbar-in { max-width: 1040px; margin: 0 auto; padding: .8rem 1.5rem;
@@ -44,21 +44,31 @@ body {
 .topnav { display: flex; gap: 1.6rem; margin-left: auto; font-size: 14px; font-weight: 500; }
 .topnav a { color: var(--fg); text-decoration: none; }
 .topnav a:hover { color: var(--fg-strong); }
-/* The lockup: the tower on the name's baseline, as tall as the letters. */
+.tabs { display: flex; gap: 1.4rem; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.tabs a { color: var(--fg-dim); text-decoration: none; padding: .15rem 0;
+  border-bottom: 2px solid transparent; }
+.tabs a:hover { color: var(--fg-strong); }
+.tabs a[aria-current="true"] { color: var(--fg-strong); border-bottom-color: var(--accent); }
+/* The lockup: the tower on the name's baseline, its merlons level with
+   the top of the letters (the l, the dot of the i); only the fire rises
+   above. Measured on Inter 600: the ascender is .724em, and the merlons
+   sit at 60/78 of the tower's height — .94em puts them there. */
 .brand, .lockup { display: inline-flex; align-items: baseline; gap: .42em;
   font-weight: 600; line-height: 1; color: var(--fg-strong);
   text-decoration: none; letter-spacing: -.01em; }
 .brand { font-size: 18px; }
-.brand .logo-mark, .lockup .logo-mark { height: .98em; width: auto; }
+.brand .logo-mark, .lockup .logo-mark { height: .94em; width: auto; }
 .logo-mark { color: currentColor; flex: none; }
 .logo-mark .beacon { fill: var(--fire); }
 /* The in-text wordmark (set by satteri-wordmark at build time): the
    name, firm, in the running text. */
 .readme .wm { font-weight: 600; color: var(--fg-strong); }
-#theme-toggle { background: none; border: 1px solid var(--border);
+#theme-toggle, #lang-select { background: none; border: 1px solid var(--border);
   border-radius: 4px; color: var(--fg-dim); font: inherit; font-size: 14px;
   line-height: 1; padding: .3rem .45rem; cursor: pointer; }
-#theme-toggle:hover { color: var(--fg-strong); border-color: var(--border-strong); }
+#theme-toggle:hover, #lang-select:hover { color: var(--fg-strong); border-color: var(--border-strong); }
+#lang-select { margin-left: -.9rem; }
+#lang-select option { background: var(--bg); color: var(--fg); }
 
 /* The hero: a band in the navy, the sheet's negative — cream tower,
    white name — with the standard's status and the one-line claim. */
@@ -83,7 +93,9 @@ body {
 .btn-primary:hover { background: var(--cream); border-color: var(--cream); color: var(--navy); }
 /* Dark: the page goes navy, so the hero band goes light — the same
    inversion, kept as one block so the two themes stay mirror images. */
-:root[data-theme='dark'] .hero { background: var(--cream); color: var(--navy); }
+:root[data-theme='dark'] .hero, :root[data-theme='dark'] .co-cta { background: var(--cream); color: var(--navy); }
+:root[data-theme='dark'] .co-cta h3 { color: var(--navy); }
+:root[data-theme='dark'] .co-cta p { color: rgba(26,34,56,.72); }
 :root[data-theme='dark'] .hero .lockup, :root[data-theme='dark'] .hero .tagline { color: var(--navy); }
 :root[data-theme='dark'] .hero .logo-mark { color: var(--navy); }
 :root[data-theme='dark'] .hero-sub, :root[data-theme='dark'] .hero-status,
@@ -110,6 +122,51 @@ body {
 .toc li a:hover { color: var(--fg-strong); }
 .toc li a[aria-current="true"] { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
 
+
+/* The tabs: one README, three bodies. The manifesto is the first four
+   parts (Manifesto, the Certificate, Human-in-charge, Talaia), everything before the
+   fifth; Individuals and Teams is everything from it
+   on; Companies is empty for now. The footnotes show under both. With
+   no script, no tab is set and the whole README shows. */
+:root[data-tab='manifesto'] .readme > h1:nth-of-type(5),
+:root[data-tab='manifesto'] .readme > h1:nth-of-type(5) ~ :not(.footnotes),
+:root[data-tab='manifesto'] .toc-part:nth-child(n+5),
+:root[data-tab='teams'] .readme > :not(h1:nth-of-type(5), h1:nth-of-type(5) ~ *),
+:root[data-tab='teams'] .toc-part:nth-child(-n+4),
+:root[data-tab='companies'] .readme,
+:root[data-tab='companies'] .toc,
+:root:not([data-tab='companies']) #companies { display: none; }
+:root[data-tab='teams'] .readme > h1:nth-of-type(5) { margin-top: 0; }
+#companies { min-height: 40vh; scroll-margin-top: 4.6rem; }
+
+/* Companies: the offer, in the standard's own voice — an overline, a
+   claim, ruled columns, cards, and one band in the navy to close. It
+   has no index, so it takes the full width. */
+:root[data-tab='companies'] .shell { grid-template-columns: minmax(0, 1fr); }
+.co-over { margin: 0; font-size: 11.5px; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--fg-dim); }
+.co-title { font-weight: 600; font-size: 2.1rem; line-height: 1.15; letter-spacing: -.02em;
+  color: var(--fg-strong); margin: .7rem 0 1rem; max-width: 26ch;
+  font-variation-settings: "opsz" 32; }
+.co-lede { font-size: 1.22rem; line-height: 1.5; color: var(--fg-strong); margin: 0; }
+.co p { max-width: var(--measure); }
+.co .wm { font-weight: 600; color: var(--fg-strong); }
+.co h3 { font-weight: 600; font-size: 1.45rem; line-height: 1.25; letter-spacing: -.015em;
+  color: var(--fg-strong); border-top: 1px solid var(--border);
+  padding-top: 2.2rem; margin: 3rem 0 .8rem; font-variation-settings: "opsz" 32; }
+.co-rows, .co-cards { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; }
+.co-rows { grid-template-columns: repeat(3, 1fr); gap: 1.8rem; }
+.co-rows > li { border-top: 2px solid var(--accent); padding-top: .9rem; color: var(--fg-dim); }
+.co-cards { grid-template-columns: 1fr 1fr; gap: .8rem; }
+.co-cards > li { padding: 1.1rem 1.25rem 1.2rem; border: 1px solid var(--border);
+  border-radius: 4px; background: var(--bg-alt); }
+.co-rows strong, .co-cards strong { display: block; font-weight: 600; font-size: 1.02rem;
+  color: var(--fg-strong); margin-bottom: .35rem; }
+.co-cta { margin-top: 3.4rem; padding: 2rem 2rem 2.1rem; border-radius: 4px;
+  background: var(--navy); color: #fff; }
+.co-cta h3 { border: 0; padding: 0; margin: 0 0 .5rem; color: #fff; }
+.co-cta .wm { color: inherit; }
+.co-cta p { margin: 0 0 1.4rem; color: rgba(250,246,239,.74); }
 
 .readme { counter-reset: part; }
 .readme > :first-child { margin-top: 0; }
@@ -144,20 +201,42 @@ body {
 .readme li { margin: .3em 0; }
 .readme li::marker { color: var(--fg-dim); }
 .readme pre { font-size: 13px; }
-/* The two towers: the manifesto's identity paragraph, framed in one
+/* The two towers: the manifesto's identity paragraph, folded into one
    enclosed block with its illustration (set by satteri-towers at build
-   time), drawn in two halves across the adjacent siblings. */
-.towers { border: 1px solid var(--border); border-bottom: 0; border-radius: 4px 4px 0 0;
-  background: var(--bg-alt); max-width: var(--measure);
-  padding: 1.4rem 1.5rem .1rem; margin: 2rem 0 0; color: var(--fg-strong); }
-.readme p.towers-text { border: 1px solid var(--border); border-top: 0;
-  border-radius: 0 0 4px 4px; background: var(--bg-alt);
-  padding: .9rem 1.5rem 1.3rem; margin: 0 0 1.6rem; }
+   time). Closed, only the drawing shows; open, the text follows and the
+   towers rise, the fire lights, and the signal passes to the next one. */
+.towers { border: 1px solid var(--border); border-radius: 4px; background: var(--bg-alt);
+  max-width: var(--measure); margin: 2rem 0 1.6rem; color: var(--fg-strong); }
+.towers summary { display: block; list-style: none; cursor: pointer; position: relative;
+  padding: 1.4rem 1.5rem .7rem; border-radius: 4px; }
+.towers summary::-webkit-details-marker { display: none; }
+.towers summary:hover, .towers summary:focus-visible { background: var(--bg); outline: none; }
+.towers summary:focus-visible { box-shadow: inset 0 0 0 2px var(--fire); }
+/* the fold mark: a chevron that turns when the block is open */
+.towers summary::after { content: ''; position: absolute; right: 1.5rem; top: 50%;
+  width: 7px; height: 7px; margin-top: -6px; border-right: 1.5px solid var(--fg-dim);
+  border-bottom: 1.5px solid var(--fg-dim); transform: rotate(45deg); transition: transform .3s; }
+.towers[open] summary::after { transform: rotate(-135deg); margin-top: -2px; }
+.readme p.towers-text { padding: .3rem 1.5rem 1.3rem; margin: 0; }
+.towers figure { margin: 0; }
 .towers svg { display: block; width: 250px; height: 78px; max-width: 100%; overflow: visible; }
 .towers .babel { opacity: .38; }
 .towers .sea { opacity: .45; }
 .towers .fire { fill: var(--fire); }
 .towers .cap { font: 600 9.5px var(--sans); letter-spacing: .12em; text-transform: uppercase; fill: var(--fg-dim); }
+.towers .babel, .towers .talaia, .towers .fire { transform-box: fill-box; transform-origin: 50% 100%; }
+.towers[open] .babel { animation: tower-rise .6s ease-out both; }
+.towers[open] .talaia { animation: tower-rise .6s .15s ease-out both; }
+.towers[open] .fire { animation: fire-light .5s .55s ease-out both; }
+.towers[open] .fire-far { animation: fire-light .5s .95s ease-out both; }
+.towers[open] .towers-text { animation: text-fade .5s .3s ease-out both; }
+@keyframes tower-rise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes fire-light { from { transform: scale(0); opacity: 0; } 60% { transform: scale(1.5); opacity: 1; } to { transform: scale(1); opacity: 1; } }
+@keyframes text-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .towers[open] .babel, .towers[open] .talaia, .towers[open] .fire, .towers[open] .fire-far,
+  .towers[open] .towers-text, .towers summary::after { animation: none; transition: none; }
+}
 
 /* The manifesto pairs: a two-column comparison between two rules, ruled
    like a table. The paragraph is "<strong>left</strong> over right<br>…". */
@@ -229,6 +308,13 @@ th strong { color: var(--fg-strong); font-weight: 600; }
   .shell { grid-template-columns: minmax(0, 1fr); gap: 1.8rem; padding: 2rem 1.1rem 2.5rem; }
   .toc { position: static; order: 2; margin-top: 2rem; }   /* content first on phones */
   .topnav { display: none; }
+  .co-rows, .co-cards { grid-template-columns: 1fr; }
+  .co-title { font-size: 1.75rem; }
+  .co-cta { padding: 1.5rem 1.2rem 1.6rem; }
+  .topbar-in { flex-wrap: wrap; row-gap: .6rem; padding: .7rem 1.1rem; }
+  .tabs { order: 3; width: 100%; overflow-x: auto; }
+  #theme-toggle { margin-left: auto; }
+  #lang-select { margin-left: -.9rem; }
   #the-project + p + ul { grid-template-columns: 1fr; }
   .readme p:has(> strong:first-child):has(> br) { grid-template-columns: 1fr; }
   .readme p:has(> strong:first-child):has(> br) > strong { padding-bottom: 0; border-bottom: 0; }

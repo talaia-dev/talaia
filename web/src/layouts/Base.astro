@@ -10,6 +10,13 @@ interface Props {
   toc: { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
 }
 const { title, description, toc } = Astro.props;
+// The tabs: the first four `#` parts of the README (Manifesto, the
+// Certificate, Human-in-charge, Talaia) are the manifesto tab, the rest is the practice; each tab links to the first heading of its body.
+const tabs = [
+  { id: 'manifesto', label: 'Manifesto', anchor: toc[0]?.anchor },
+  { id: 'teams', label: 'Individuals and Teams', anchor: toc[4]?.anchor },
+  { id: 'companies', label: 'Companies', anchor: 'companies' },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -44,16 +51,28 @@ const { title, description, toc } = Astro.props;
   <script is:inline>
     // Light by default, like a published standard; dark stays a choice.
     document.documentElement.dataset.theme = localStorage.getItem('theme') ?? 'light';
+    // The body opens on the manifesto; the script at the foot of the page
+    // moves to the tab an anchor belongs to.
+    document.documentElement.dataset.tab = location.hash === '#companies' ? 'companies' : 'manifesto';
   </script>
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-in">
       <a class="brand" href="/"><Logo size={20} /><Wordmark /></a>
+      <nav class="tabs" aria-label="Sections">
+        {tabs.map((t) => <a href={`#${t.anchor}`} data-tab={t.id}>{t.label}</a>)}
+      </nav>
       <nav class="topnav" aria-label="Repository">
         <a href="https://github.com/talaia-dev/talaia">GitHub</a>
       </nav>
       <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme">◐</button>
+      <!-- No effect yet: the translations come later. -->
+      <select id="lang-select" aria-label="Language">
+        <option value="en" selected>English</option>
+        <option value="es">Español</option>
+        <option value="ca">Català</option>
+      </select>
     </div>
   </header>
   <slot name="hero" />
@@ -83,6 +102,30 @@ const { title, description, toc } = Astro.props;
     </main>
   </div>
   <script is:inline>
+    // Tabs: one page, three bodies. The anchor decides which one shows:
+    // none is the manifesto, #companies is Companies, and any other
+    // belongs to the tab its target sits in (before or after the
+    // README's fifth `#`). The footnotes show under both, so a note's
+    // anchor keeps the tab that is open.
+    (() => {
+      const root = document.documentElement;
+      const split = document.querySelector('.readme > h1:nth-of-type(5)');
+      const show = () => {
+        const id = decodeURIComponent(location.hash.slice(1));
+        const el = id ? document.getElementById(id) : null;
+        let tab = root.dataset.tab;
+        if (!id) tab = 'manifesto';
+        else if (id === 'companies') tab = 'companies';
+        else if (el && el.closest('.readme') && !el.closest('.footnotes'))
+          tab = split && !(split.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING) ? 'teams' : 'manifesto';
+        root.dataset.tab = tab;
+        for (const a of document.querySelectorAll('.tabs a'))
+          a.dataset.tab === tab ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current');
+        if (el) el.scrollIntoView();   // the browser cannot scroll to a target that was hidden
+      };
+      addEventListener('hashchange', show);
+      show();
+    })();
     // Scroll-spy: the index highlights the section whose heading was the
     // last to pass under the top bar. Headings are the README's ## (the
     // hidden "Introduction" ones included: absolute-positioned, but they
@@ -97,13 +140,14 @@ const { title, description, toc } = Astro.props;
       const update = () => {
         ticking = false;
         const line = 96; // just under the sticky top bar
-        let active = headings[0];
+        let active = null;
         for (const h of headings) {
-          if (h.getBoundingClientRect().top <= line) active = h; else break;
+          if (!h.getClientRects().length) continue;   // in a tab that is not showing
+          if (!active || h.getBoundingClientRect().top <= line) active = h; else break;
         }
         if (active === current) return;
         if (current) links.get(current.id).removeAttribute('aria-current');
-        links.get(active.id).setAttribute('aria-current', 'true');
+        if (active) links.get(active.id).setAttribute('aria-current', 'true');
         current = active;
       };
       const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };

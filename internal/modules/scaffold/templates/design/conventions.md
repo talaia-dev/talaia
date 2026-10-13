@@ -1,7 +1,8 @@
 # conventions.md — Coding and development conventions
 
-<!-- AI memory (.talaia/context/). What "done right" looks like here.
-     Keep short and concrete. -->
+<!-- Design (.talaia/). Written and approved by a person: the AI reads
+     it and never changes it on its own. What "done right" looks like
+     here. Keep short and concrete. -->
 
 ## Commands
 

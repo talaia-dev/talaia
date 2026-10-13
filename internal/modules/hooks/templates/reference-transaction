@@ -1,0 +1,27 @@
+#!/bin/sh
+# talaia · git writes are reserved to the person (AGENTS.md).
+#
+# Refuses every ref update — commit, branch, tag, stash, merge, rebase,
+# cherry-pick, revert — when the process belongs to an AI agent. Git
+# runs this hook before the update lands, and `--no-verify` does not
+# skip it. It does not cover the index or the working tree (add, reset
+# --hard, checkout -- file, clean): for those, the agent's own
+# configuration (`talaia hooks claude|gemini`).
+#
+# An agent is recognised by the environment variable it sets:
+#   CLAUDECODE     Claude Code (verified)
+#   GEMINI_CLI     Gemini CLI (unverified)
+#   CODEX_SANDBOX  Codex (unverified)
+#   TALAIA_AGENT   any agent you launch yourself: TALAIA_AGENT=1 aider
+# Add your agent's variable to the test below. Without any of them the
+# hook does nothing, so the person and their tools never notice it.
+#
+# Installed by `talaia hooks git`, once per clone; never versioned.
+[ "$1" = prepared ] || exit 0
+[ -n "$CLAUDECODE$GEMINI_CLI$CODEX_SANDBOX$TALAIA_AGENT" ] || exit 0
+while read -r old new ref; do
+  case "$ref" in refs/remotes/*) continue ;; esac
+  echo "talaia: git writes are reserved to the person ($ref) — see AGENTS.md" >&2
+  exit 1
+done
+exit 0

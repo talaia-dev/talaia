@@ -1,6 +1,7 @@
 # constraints.md — Technical, business and architectural constraints
 
-<!-- AI memory (.talaia/context/). Hard limits that bound
+<!-- Design (.talaia/). Written and approved by a person: the AI reads
+     it and never changes it on its own. Hard limits that bound
      implementation choices: an approach that violates one of these is
      wrong even if it works. -->
 

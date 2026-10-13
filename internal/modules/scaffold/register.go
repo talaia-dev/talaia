@@ -11,7 +11,7 @@ import (
 func Register(app *cli.App) {
 	app.AddCommand(&cli.Command{
 		Name:    "init",
-		Summary: "Set up the talaia harness: AGENTS.md, .talaia/context/, the pull request template and the check (never overwrites)",
+		Summary: "Set up the talaia harness: AGENTS.md, the .talaia/ design files, the pull request template and the check (never overwrites)",
 		Usage:   "talaia init",
 		Run: func(args []string) error {
 			if len(args) != 0 {

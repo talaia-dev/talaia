@@ -121,10 +121,10 @@ type Report struct {
 	Authors          []AuthorStat `json:"authors"`
 }
 
-// HasGaps reports whether any commit is unsigned or has no story — the
-// two things --strict refuses. The budget is advisory.
+// HasGaps reports whether any commit is unsigned — the one thing
+// --strict refuses. A missing story id and the budget are advisory.
 func (r Report) HasGaps() bool {
-	return r.Signed < r.Total || r.Story < r.Total
+	return r.Signed < r.Total
 }
 
 // Summarize computes the report for the given commits and line budget.

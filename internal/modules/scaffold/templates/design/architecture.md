@@ -1,7 +1,8 @@
 # architecture.md — Project overview, structure and principles
 
-<!-- AI memory (.talaia/context/). Practical guidance, not exhaustive
-     docs. Update when the structure or the principles change. -->
+<!-- Design (.talaia/). Written and approved by a person: the AI reads
+     it and never changes it on its own. Practical guidance, not
+     exhaustive docs. -->
 
 ## Project overview
 

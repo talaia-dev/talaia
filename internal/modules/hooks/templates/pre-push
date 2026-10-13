@@ -1,0 +1,11 @@
+#!/bin/sh
+# talaia · pushing is reserved to the person (AGENTS.md).
+#
+# Same agent detection as the reference-transaction hook; see it for
+# the list of variables. Unlike that hook, `git push --no-verify`
+# skips this one.
+#
+# Installed by `talaia hooks git`, once per clone; never versioned.
+[ -n "$CLAUDECODE$GEMINI_CLI$CODEX_SANDBOX$TALAIA_AGENT" ] || exit 0
+echo "talaia: git push is reserved to the person — see AGENTS.md" >&2
+exit 1

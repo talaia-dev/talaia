@@ -89,6 +89,21 @@ func TestSummarizeCountsAndGaps(t *testing.T) {
 	}
 }
 
+func TestStrictRefusesOnlyUnsignedCommits(t *testing.T) {
+	storyless := Commit{Hash: "d4e5f6a", Subject: "fix typo", Signed: true, Insertions: 900}
+	r := Summarize([]Commit{storyless}, 300)
+	if r.HasGaps() {
+		t.Error("a signed commit without a story id or over budget must be a warning, not a gap --strict refuses")
+	}
+	kinds := map[string]int{}
+	for _, g := range r.Gaps {
+		kinds[g.Kind]++
+	}
+	if kinds["no story"] != 1 || kinds["900 lines"] != 1 {
+		t.Errorf("warnings must still be reported: gaps = %+v", r.Gaps)
+	}
+}
+
 func TestWriteTextReport(t *testing.T) {
 	var out bytes.Buffer
 	r := Summarize(Parse(fixture), 300)

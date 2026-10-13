@@ -20,24 +20,29 @@ for (const { headings } of sections) {
     else if (h.depth === 2 && toc.length) toc[toc.length - 1].items.push({ anchor: h.slug, title: h.text });
   }
 }
+
+// Where "Talk to us" leads. No contact channel is decided yet: until it
+// is, the button stays on the Companies tab.
+const contact = '#companies';
 ---
 <Base
-  title="talaia — human in command"
-  description="A human-in-command accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest."
+  title="talaia — human in charge"
+  description="A human-in-charge accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest."
   toc={toc}
 >
   <header class="hero" slot="hero">
     <div class="hero-in">
       <div class="lockup"><Logo size={30} /><Wordmark /></div>
       <h1 class="tagline">You direct. The AI builds.<br />Your name answers for it.</h1>
-      <p class="hero-sub">Talaia is a human-in-command standard for work done with AI, and
+      <p class="hero-sub">Talaia is a human-in-charge standard for work done with AI, and
         its whole claim fits in one line: the machine may produce the work;
         only a person can answer for it. It gives that person a certificate to sign — under a
         published post, at the foot of a report, in a commit — and a
         method that makes the signature honest.</p>
       <p class="hero-cta">
-        <a class="btn btn-primary" href="#the-instruments-rules">Get started</a>
-        <a class="btn" href="#introduction">Read the manifesto</a>
+        <a class="btn btn-primary" href={`#${toc[0]?.anchor}`}>Read the manifesto</a>
+        <a class="btn" href={`#${toc[4]?.anchor}`}>Apply it, solo or as a team</a>
+        <a class="btn" href="#companies">Bring talaia to your company</a>
       </p>
     </div>
   </header>
@@ -45,4 +50,59 @@ for (const { headings } of sections) {
   <article class="readme">
     {sections.map(({ Content }) => <Content />)}
   </article>
+  <!-- Companies: the one body written here and not in the README, so
+       the standard on GitHub and in llms.txt carries no commercial part. -->
+  <section id="companies" class="co" aria-label="Companies">
+    <p class="co-over">For companies</p>
+    <h2 class="co-title">AI across the company, with a name on every piece of work.</h2>
+    <p class="co-lede">Your teams already work with AI. What a customer, an auditor or
+      your own board will ask is who read the result and who answers for it. The
+      Certificate of Understanding gives every piece of work that answer,
+      and <span class="wm">talaia</span> helps you adopt it across the organization, prove it,
+      and ask the same of others.</p>
+
+    <h3>One practice, three directions</h3>
+    <p>The certificate is the same two clauses a single developer signs. Adopted by a
+      company, it becomes a good practice that travels with the work.</p>
+    <ul class="co-rows">
+      <li><strong>Inside the company</strong> Every piece of work done with AI — code, a
+        report, a post — carries the name of a person who read it in full and answers
+        for it. The names accumulate as the work goes up: the author, the reviewer, the
+        board.</li>
+      <li><strong>To your customers</strong> Deliver the certificate as a seal on what
+        you hand over: an AI helped make this, and a named person stands behind it.</li>
+      <li><strong>From your distributors</strong> Require it of those whose work you
+        receive, the way you already require any other standard of quality.</li>
+    </ul>
+
+    <h3>Official certification</h3>
+    <p>The standard is open and free: any company can
+      adopt <span class="wm">talaia</span> and say so, and that is its own word. Official
+      certification is ours. <span class="wm">talaia</span> checks how the company works
+      and puts its name behind the result, so that your customers do not have to take
+      your word for it.</p>
+
+    <h3>Services</h3>
+    <p>You pay for help and for verification, never for the right to use the
+      standard. Take one, or all four on the way to certification.</p>
+    <ul class="co-cards">
+      <li><strong>Training</strong> For the people who direct the AI and sign for its
+        work: how to brief it, how to read what comes back, and when not to sign.</li>
+      <li><strong>Audit</strong> An independent reading of where you stand today: which
+        work carries a signature, which does not, and what stands in the way.</li>
+      <li><strong>Consulting</strong> The certificate fitted to how you already work —
+        your processes, your tools, your definition of done. Nothing you have is
+        replaced.</li>
+      <li><strong>Forward deployed engineers</strong> Our engineers inside your teams,
+        putting the framework to work in your own repositories and pipelines until it
+        runs without us.</li>
+    </ul>
+
+    <div class="co-cta">
+      <h3>Bring <span class="wm">talaia</span> to your company</h3>
+      <p>Tell us how your teams work with AI today, and we will tell you what it takes
+        to put a name on every piece of it.</p>
+      <a class="btn btn-primary" href={contact}>Talk to us</a>
+    </div>
+  </section>
 </Base>

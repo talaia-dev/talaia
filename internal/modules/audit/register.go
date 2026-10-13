@@ -27,7 +27,7 @@ func Register(app *cli.App) {
 				return err
 			}
 			if o.Strict && rep.HasGaps() {
-				return fmt.Errorf("audit: %d unsigned, %d without a story (--strict)", rep.Total-rep.Signed, rep.Total-rep.Story)
+				return fmt.Errorf("audit: %d unsigned (--strict)", rep.Total-rep.Signed)
 			}
 			return nil
 		},

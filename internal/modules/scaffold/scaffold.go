@@ -1,22 +1,23 @@
 // Package scaffold implements "talaia init": it generates the harness of
 // the talaia framework in a project — the AGENTS.md rules that make an
 // AI agent work inside Brief → Build → Watch → Sign, and the .talaia/
-// context memory.
+// design files the person writes before any Brief.
 //
 // Layout created (existing files are never overwritten):
 //
 //	AGENTS.md                        framework rules for AI agents (repo root)
 //	CLAUDE.md                        redirect to AGENTS.md for Claude Code
 //	GEMINI.md                        redirect to AGENTS.md for Gemini CLI
-//	.github/PULL_REQUEST_TEMPLATE.md the explanation's shape and the Certificate of Understanding
+//	.github/PULL_REQUEST_TEMPLATE.md what, why, how it was tested, and the Certificate of Understanding
 //	.github/workflows/talaia.yml     the audit check on every pull request (the enforcement)
-//	.talaia/context/architecture.md  project overview, structure, principles
-//	.talaia/context/conventions.md   coding and development conventions
-//	.talaia/context/constraints.md   hard limits, incl. decisions that bind future work
-//	.talaia/.gitignore               keeps the agent's session note out of history
+//	.talaia/architecture.md          project overview, structure, principles
+//	.talaia/conventions.md           coding and development conventions
+//	.talaia/constraints.md           hard limits, incl. decisions that bind future work
 //
-// context/ is the only memory: the story lives on the team's board, the
-// change in git, the explanation in the pull request. Nothing here needs
+// The three .talaia/ files are the design: seeded as TODOs for a person
+// to write and approve; the agent reads them and never changes them on
+// its own. Nothing else is generated: the story lives on the team's
+// board, the change in git, the explanation in the pull request. Nothing here needs
 // configuring after init: the agent reminds the certificate at sign-off
 // (AGENTS.md) and the pull request template is applied by the forge.
 // Gates — hooks, CI, branch protection — belong to the team.
@@ -96,14 +97,11 @@ func Run(root string) (*Report, error) {
 		return nil, err
 	}
 
-	if err := os.MkdirAll(filepath.Join(root, ".talaia", "context"), 0o755); err != nil {
-		return nil, err
-	}
-	if err := create(filepath.Join(".talaia", ".gitignore"), tpl("talaia-gitignore")); err != nil {
+	if err := os.MkdirAll(filepath.Join(root, ".talaia"), 0o755); err != nil {
 		return nil, err
 	}
 	for _, name := range []string{"architecture.md", "conventions.md", "constraints.md"} {
-		if err := create(filepath.Join(".talaia", "context", name), tpl("context/"+name)); err != nil {
+		if err := create(filepath.Join(".talaia", name), tpl("design/"+name)); err != nil {
 			return nil, err
 		}
 	}

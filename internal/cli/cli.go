@@ -60,7 +60,7 @@ func (a *App) Run(args []string) error {
 }
 
 func (a *App) printHelp() {
-	fmt.Printf("%s — human-in-command standard for work done with AI: the tool for software\n\n", a.name)
+	fmt.Printf("%s — human-in-charge standard for work done with AI: the tool for software\n\n", a.name)
 
 	fmt.Println("Commands:")
 	names := make([]string, 0, len(a.commands))

@@ -6,7 +6,7 @@ export const GET: APIRoute = async () => {
 
   const body = [
     '# talaia',
-    '> Human-in-command accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest.',
+    '> Human-in-charge accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest.',
     '',
     'The signature is one line added to the work, address and name: `talaia.dev/certificate — John Doe`. In software, `git commit -s` with the address in the message.',
     '',

@@ -20,7 +20,7 @@ inputs:
     required: false
     default: '300'
   strict:
-    description: 'Fail when a commit is unsigned or has no story id.'
+    description: 'Fail when a commit is unsigned (story ids and the budget are advisory).'
     required: false
     default: 'true'
 
@@ -63,6 +63,6 @@ runs:
         "${RUNNER_TEMP}/talaia" audit "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY" || status=$?
         echo '```' >> "$GITHUB_STEP_SUMMARY"
         if [ "$status" -ne 0 ]; then
-          echo "::error::talaia audit failed: a commit is unsigned or has no story id (see the job summary)"
+          echo "::error::talaia audit failed: a commit is unsigned (see the job summary)"
         fi
         exit "$status"

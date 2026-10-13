@@ -32,10 +32,9 @@ func TestRunCreatesScaffolding(t *testing.T) {
 	wantCreated := []string{
 		".github/PULL_REQUEST_TEMPLATE.md",
 		".github/workflows/talaia.yml",
-		".talaia/.gitignore",
-		".talaia/context/architecture.md",
-		".talaia/context/constraints.md",
-		".talaia/context/conventions.md",
+		".talaia/architecture.md",
+		".talaia/constraints.md",
+		".talaia/conventions.md",
 		"AGENTS.md",
 		"CLAUDE.md",
 		"GEMINI.md",
@@ -78,7 +77,10 @@ func TestAgentsMDDescribesTheFramework(t *testing.T) {
 		"Write no documents",
 		"Two strikes",
 		"Assisted-by",
-		".talaia/context/",
+		"## DESIGN",
+		".talaia/architecture.md",
+		"never change them on your own",
+		"contradicts the design",
 		"If `.talaia/disabled` exists, ignore this file",
 		"Sign only if you can certify",
 		"--trailer \"Assisted-by:",
@@ -88,6 +90,7 @@ func TestAgentsMDDescribesTheFramework(t *testing.T) {
 		"Nothing more, nothing less",
 		"What a person wrote stays as they wrote it",
 		"No questions left: build",
+		"assumptions are yours",
 	} {
 		if !strings.Contains(content, want) {
 			t.Errorf("AGENTS.md lacks %q", want)
@@ -97,6 +100,7 @@ func TestAgentsMDDescribesTheFramework(t *testing.T) {
 		"journal.json", "approved plan", "decisions/", "features/",
 		".talaia/work", "human Developer", "the Developer's", "Developer says",
 		"delivery-note", "session note", "everything is clear", "Three questions",
+		".talaia/context", "MEMORY", "talaia fill",
 	} {
 		if strings.Contains(content, banned) {
 			t.Errorf("AGENTS.md must not reference %q", banned)
@@ -104,7 +108,7 @@ func TestAgentsMDDescribesTheFramework(t *testing.T) {
 	}
 }
 
-func TestPullRequestTemplateCarriesTheNoteAndTheCertificate(t *testing.T) {
+func TestPullRequestTemplateCarriesTheExplanationAndTheCertificate(t *testing.T) {
 	root := newProject(t)
 	if _, err := Run(root); err != nil {
 		t.Fatal(err)
@@ -115,27 +119,25 @@ func TestPullRequestTemplateCarriesTheNoteAndTheCertificate(t *testing.T) {
 	}
 	tpl := string(data)
 	for _, want := range []string{
-		"## What changed", "## Why", "## How it was tested",
-		"## Three questions",
+		"## What", "## Why", "## How it was tested",
+		"real output",
 		"Assisted by:",
 		"talaia.dev/certificate",
 		"- [ ] This change was created with the assistance of an AI, at my direction and to a brief that was mine",
-		"- [ ] I have read it in full; I can explain what it does and why without the help of an AI; I checked what it claims; I take responsibility for it and make it my own",
+		"- [ ] I have read it in full; I can explain what it does and why without the help of an AI; I checked what it claims, and its opinions and assumptions are mine; I take responsibility for it and make it my own",
 	} {
 		if !strings.Contains(tpl, want) {
 			t.Errorf("PULL_REQUEST_TEMPLATE.md lacks %q", want)
 		}
 	}
-	ign, err := os.ReadFile(filepath.Join(root, ".talaia", ".gitignore"))
-	if err != nil {
-		t.Fatal(err)
+	for _, banned := range []string{"delivery-note", "session note", "Three questions", "--body-file"} {
+		if strings.Contains(tpl, banned) {
+			t.Errorf("PULL_REQUEST_TEMPLATE.md must not reference %q", banned)
+		}
 	}
-	if !strings.Contains(string(ign), "delivery-note.md") {
-		t.Error(".talaia/.gitignore must keep the session note out of history")
-	}
-	for _, gone := range []string{".gitmessage", ".talaia/hooks", ".talaia/work"} {
+	for _, gone := range []string{".gitmessage", ".talaia/hooks", ".talaia/work", ".talaia/.gitignore"} {
 		if _, err := os.Stat(filepath.Join(root, gone)); !os.IsNotExist(err) {
-			t.Errorf("%s must not be created: gates belong to the team, not the framework", gone)
+			t.Errorf("%s must not be created: the framework generates no artifact nobody reads", gone)
 		}
 	}
 }
@@ -161,12 +163,32 @@ func TestWorkflowInstallsTheAuditCheck(t *testing.T) {
 	}
 }
 
-func TestRunCreatesOnlyContextMemory(t *testing.T) {
+func TestDesignFilesBelongToThePerson(t *testing.T) {
 	root := newProject(t)
 	if _, err := Run(root); err != nil {
 		t.Fatal(err)
 	}
-	for _, d := range []string{"decisions", "features"} {
+	for _, name := range []string{"architecture.md", "conventions.md", "constraints.md"} {
+		data, err := os.ReadFile(filepath.Join(root, ".talaia", name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		content := string(data)
+		if !strings.Contains(content, "Written and approved by a person") {
+			t.Errorf("%s does not say the design is the person's", name)
+		}
+		if strings.Contains(content, "AI memory") {
+			t.Errorf("%s still presents itself as AI memory", name)
+		}
+	}
+}
+
+func TestRunCreatesOnlyTheDesign(t *testing.T) {
+	root := newProject(t)
+	if _, err := Run(root); err != nil {
+		t.Fatal(err)
+	}
+	for _, d := range []string{"decisions", "features", "context"} {
 		if _, err := os.Stat(filepath.Join(root, ".talaia", d)); !os.IsNotExist(err) {
 			t.Errorf(".talaia/%s must not be created: the story lives on the board, the change in git", d)
 		}
