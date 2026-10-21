@@ -6,7 +6,7 @@ set -e
 cd "$(dirname "$0")/.."
 [ -f dist/og-card/index.html ] || { echo "og.sh: build first (npm run build)"; exit 1; }
 port=8766
-(cd dist && python3 -m http.server "$port" >/dev/null 2>&1 &)
+(cd dist && python3 -m http.server --bind 127.0.0.1 "$port" >/dev/null 2>&1 &)
 sleep 1
 tmp=$(mktemp --suffix=.png)
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1200,900 \

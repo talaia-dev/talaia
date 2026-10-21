@@ -163,10 +163,24 @@ body {
 .co-rows strong, .co-cards strong { display: block; font-weight: 600; font-size: 1.02rem;
   color: var(--fg-strong); margin-bottom: .35rem; }
 .co-cta { margin-top: 3.4rem; padding: 2rem 2rem 2.1rem; border-radius: 4px;
-  background: var(--navy); color: #fff; }
-.co-cta h3 { border: 0; padding: 0; margin: 0 0 .5rem; color: #fff; }
+  background: var(--navy); color: #fff;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 1.5rem; }
+.co-cta h3 { border: 0; padding: 0; margin: 0; color: #fff; }
 .co-cta .wm { color: inherit; }
 .co-cta p { margin: 0 0 1.4rem; color: rgba(250,246,239,.74); }
+/* The contact form, inside the band: fields take the band's ink, so the
+   same rules serve the navy band and the cream one in dark. */
+.co-form { flex-basis: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; }
+.co-form label { display: grid; gap: .35rem; font-size: 13.5px; font-weight: 600; }
+.co-form .wide, .co-send { grid-column: 1 / -1; }
+.co-form input, .co-form select, .co-form textarea { font: inherit; font-size: 1rem; font-weight: 400;
+  color: inherit; background: transparent; border-radius: 4px; padding: .55rem .7rem;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent); }
+.co-form textarea { resize: vertical; }
+.co-form option, .co-form optgroup { color: var(--navy); background: #fff; }
+.co-send { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; }
+.co-send button:disabled { opacity: .6; cursor: progress; }
+.co-cta .co-status { margin: 0; color: inherit; }
 
 .readme { counter-reset: part; }
 .readme > :first-child { margin-top: 0; }
@@ -311,6 +325,7 @@ th strong { color: var(--fg-strong); font-weight: 600; }
   .co-rows, .co-cards { grid-template-columns: 1fr; }
   .co-title { font-size: 1.75rem; }
   .co-cta { padding: 1.5rem 1.2rem 1.6rem; }
+  .co-form { grid-template-columns: 1fr; }
   .topbar-in { flex-wrap: wrap; row-gap: .6rem; padding: .7rem 1.1rem; }
   .tabs { order: 3; width: 100%; overflow-x: auto; }
   #theme-toggle { margin-left: auto; }

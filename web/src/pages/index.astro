@@ -21,13 +21,12 @@ for (const { headings } of sections) {
   }
 }
 
-// Where "Talk to us" leads. No contact channel is decided yet: until it
-// is, the button stays on the Companies tab.
-const contact = '#companies';
+// Where the Companies form sends: a Formspree form, which mails it on.
+const contact = 'https://formspree.io/f/xdeaqlnb';
 ---
 <Base
   title="talaia — human in charge"
-  description="A human-in-charge accountability standard for work done with AI: a certificate a person signs, and a method — Brief → Build → Watch → Sign — that makes the signature honest."
+  description="A human-in-charge accountability standard for work done with AI: a certificate a person signs, and a method (Brief → Build → Watch → Sign) that makes the signature honest."
   toc={toc}
 >
   <header class="hero" slot="hero">
@@ -36,8 +35,8 @@ const contact = '#companies';
       <h1 class="tagline">You direct. The AI builds.<br />Your name answers for it.</h1>
       <p class="hero-sub">Talaia is a human-in-charge standard for work done with AI, and
         its whole claim fits in one line: the machine may produce the work;
-        only a person can answer for it. It gives that person a certificate to sign — under a
-        published post, at the foot of a report, in a commit — and a
+        only a person can answer for it. It gives that person a certificate to sign (under a
+        published post, at the foot of a report, in a commit) and a
         method that makes the signature honest.</p>
       <p class="hero-cta">
         <a class="btn btn-primary" href={`#${toc[0]?.anchor}`}>Read the manifesto</a>
@@ -54,55 +53,140 @@ const contact = '#companies';
        the standard on GitHub and in llms.txt carries no commercial part. -->
   <section id="companies" class="co" aria-label="Companies">
     <p class="co-over">For companies</p>
-    <h2 class="co-title">AI across the company, with a name on every piece of work.</h2>
-    <p class="co-lede">Your teams already work with AI. What a customer, an auditor or
-      your own board will ask is who read the result and who answers for it. The
-      Certificate of Understanding gives every piece of work that answer,
-      and <span class="wm">talaia</span> helps you adopt it across the organization, prove it,
-      and ask the same of others.</p>
+    <h2 class="co-title">Every use of AI in the company, with a person in charge of it.</h2>
+    <p class="co-lede">Your teams already work with AI: in code, in reports, in processes
+      that run on their own. What a customer, an auditor or your own board will ask is
+      not whether AI was used. It is who decided it should be, who understands what it
+      does, and who answers when it fails. <span class="wm">talaia</span> gives the company
+      that answer: values held across the organization, a way of working that keeps
+      judgment with people, and a signature that shows it in every piece of work.</p>
+
+    <h3>What the company adopts</h3>
+    <p>Not a tool, and not a new process. A position on AI, held by the whole
+      organization before any tool is chosen.</p>
+    <ul class="co-rows">
+      <li><strong>The manifesto</strong> The company's values on AI: human judgment over
+        machine autonomy, a person who answers over a system with no owner,
+        understanding what goes out over accepting what works, and knowing when not to
+        use it.</li>
+      <li><strong>Human-in-charge</strong> Every use of AI has a named person in charge:
+        someone who decided it, designed it, understands it and answers for it. That
+        includes the automations nobody watches: the person answers for the system, not
+        for each thing it produces.</li>
+      <li><strong>The framework</strong> The line between what may be delegated and what
+        must stay human. The design written once per system, then Brief, Build, Watch,
+        Sign for each piece of work, under the process you already have.</li>
+    </ul>
 
     <h3>One practice, three directions</h3>
-    <p>The certificate is the same two clauses a single developer signs. Adopted by a
-      company, it becomes a good practice that travels with the work.</p>
+    <p>The Certificate of Understanding is how all of it shows: the same two clauses a
+      single person signs. Adopted by a company, it becomes a good practice that travels
+      with the work.</p>
     <ul class="co-rows">
-      <li><strong>Inside the company</strong> Every piece of work done with AI — code, a
-        report, a post — carries the name of a person who read it in full and answers
-        for it. The names accumulate as the work goes up: the author, the reviewer, the
-        board.</li>
+      <li><strong>Inside the company</strong> Every piece of work done with AI (code, a
+        report, a post, an automation) carries the name of a person who understands it
+        and answers for it. The names accumulate as the work goes up: the author, the
+        reviewer, the board.</li>
       <li><strong>To your customers</strong> Deliver the certificate as a seal on what
         you hand over: an AI helped make this, and a named person stands behind it.</li>
       <li><strong>From your distributors</strong> Require it of those whose work you
         receive, the way you already require any other standard of quality.</li>
     </ul>
 
-    <h3>Official certification</h3>
-    <p>The standard is open and free: any company can
-      adopt <span class="wm">talaia</span> and say so, and that is its own word. Official
-      certification is ours. <span class="wm">talaia</span> checks how the company works
-      and puts its name behind the result, so that your customers do not have to take
-      your word for it.</p>
-
-    <h3>Services</h3>
-    <p>You pay for help and for verification, never for the right to use the
-      standard. Take one, or all four on the way to certification.</p>
+    <h3>Services for adopting <span class="wm">talaia</span></h3>
     <ul class="co-cards">
-      <li><strong>Training</strong> For the people who direct the AI and sign for its
-        work: how to brief it, how to read what comes back, and when not to sign.</li>
-      <li><strong>Audit</strong> An independent reading of where you stand today: which
-        work carries a signature, which does not, and what stands in the way.</li>
-      <li><strong>Consulting</strong> The certificate fitted to how you already work —
-        your processes, your tools, your definition of done. Nothing you have is
-        replaced.</li>
+      <li><strong>Training</strong> For everyone who works with AI, not only engineers:
+        why the person stays above the tool, how to brief it, how to read what comes
+        back, and when not to sign. For those who own an automation, how to answer for
+        a system.</li>
+      <li><strong>Audit</strong> An independent reading of where you stand today: where
+        AI is used, who is in charge of each use, which work carries a signature, which
+        does not, and what stands in the way.</li>
+      <li><strong>Consulting</strong> The framework fitted to how you already work
+        (your processes, your tools, your definition of done) and a clear line on what
+        is handed to the machine and what is not. Nothing you have is replaced.</li>
+      <li><strong>Official certification</strong> The standard is open
+        and free: any company can adopt <span class="wm">talaia</span> and say so, on its
+        own word. Official certification is ours: <span class="wm">talaia</span> checks how
+        the company works (where it uses AI, who is in charge of each use, how the work
+        is signed) and puts its name behind the result, so that your customers do not
+        have to take your word for it.</li>
+    </ul>
+
+    <h3>Engineering services</h3>
+    <p>Beyond <span class="wm">talaia</span> itself, we build, the way the standard asks:
+      the design written before the first line, a person in charge of every use of AI,
+      and the work read in full and signed before it is handed over.</p>
+    <ul class="co-cards">
+      <li><strong>AI projects</strong> Agents, automations, document and data pipelines,
+        put to work inside your business, each with a person in your company in charge of
+        it who can explain how it works. Where AI is not the right tool, we say so.</li>
+      <li><strong>Software engineering</strong> Products and platforms built and
+        maintained with AI-assisted engineering: designed by people, built inside
+        written rules, and understood by those who will answer for them.</li>
+      <li><strong>Process optimization</strong> Your processes reviewed end to end: what
+        to automate, what to hand to AI, what to leave as it is, and who stays in charge
+        of each step.</li>
       <li><strong>Forward deployed engineers</strong> Our engineers inside your teams,
-        putting the framework to work in your own repositories and pipelines until it
-        runs without us.</li>
+        working in your own repositories, pipelines and processes, the 
+        <span class="wm"> talaia</span> way, until it runs without us.</li>
     </ul>
 
     <div class="co-cta">
       <h3>Bring <span class="wm">talaia</span> to your company</h3>
-      <p>Tell us how your teams work with AI today, and we will tell you what it takes
-        to put a name on every piece of it.</p>
-      <a class="btn btn-primary" href={contact}>Talk to us</a>
+      <form class="co-form" action={contact} method="POST">
+        <label>Name <input name="name" autocomplete="name" /></label>
+        <label>Company <input name="company" autocomplete="organization" /></label>
+        <label>Email <input type="email" name="email" autocomplete="email" required /></label>
+        <label>Service
+          <select name="service">
+            <option value="">Not sure yet</option>
+            <optgroup label="Adopting talaia">
+              <option>Training</option>
+              <option>Audit</option>
+              <option>Consulting</option>
+              <option>Official certification</option>
+            </optgroup>
+            <optgroup label="Engineering services">
+              <option>AI projects</option>
+              <option>Software engineering</option>
+              <option>Process optimization</option>
+              <option>Forward deployed engineers</option>
+            </optgroup>
+          </select>
+        </label>
+        <label class="wide">Message <textarea name="message" rows="5" required></textarea></label>
+        <div class="co-send">
+          <button class="btn btn-primary" type="submit">Talk to us</button>
+          <p class="co-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
     </div>
+    <script is:inline>
+      // Sends the form without leaving the page. Without JS the form
+      // posts to Formspree as it is, and Formspree's own page answers.
+      (() => {
+        const form = document.querySelector('.co-form');
+        const status = form.querySelector('.co-status');
+        const button = form.querySelector('button');
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          button.disabled = true;
+          status.textContent = 'Sending…';
+          try {
+            const res = await fetch(form.action, {
+              method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' },
+            });
+            if (!res.ok) throw new Error(res.statusText);
+            form.reset();
+            status.textContent = 'Thank you, your message has been sent.';
+          } catch {
+            status.textContent = 'The message could not be sent. Please try again.';
+          } finally {
+            button.disabled = false;
+          }
+        });
+      })();
+    </script>
   </section>
 </Base>
