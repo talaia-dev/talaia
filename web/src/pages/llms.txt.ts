@@ -14,7 +14,7 @@ export const GET: APIRoute = async () => {
     '',
     '- [The Certificate of Understanding](https://talaia.dev/certificate): the text a person certifies, in the shape of the DCO.',
     '- [AGENTS.md](https://talaia.dev/agentsmd): the instructions file that puts the framework in front of an AI agent.',
-    '- [How to install AGENTS.md](https://talaia.dev/how-to-agentsmd): where each tool reads it (Claude Code, Codex, Gemini CLI, Cursor, Copilot, Windsurf, Aider, and the chat apps).',
+    '- [How to install AGENTS.md](https://talaia.dev/how-to-agentsmd): where each tool reads it (Claude Code, Codex, Gemini CLI, Cursor, Copilot, Windsurf and Aider).',
     '- [The pull request check](https://talaia.dev/pr-check): the workflow that fails a pull request with an unsigned commit.',
     '- [How to install the pull request check](https://talaia.dev/how-to-pr-check): GitHub, Gitea, GitLab, Bitbucket, and how to make it required.',
     '- [Repository](https://github.com/talaia-dev/talaia): the standard, the CLI and this site.',

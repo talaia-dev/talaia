@@ -72,7 +72,7 @@ forge to every PR, no `gh` flags needed.
 
 - Only the Certificate of Understanding uses a ```txt fence — the site
   renders every `txt` fence as the white sheet. Other plain blocks
-  (the two lines, the mark, the footer block, the instrument's rules)
+  (the two lines, the mark, the footer block)
   use ```text so they stay ordinary code blocks.
 - The frontmatter `summary` contains a colon: keep it double-quoted or
   the content collection fails to parse (`bad indentation of a mapping

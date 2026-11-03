@@ -93,47 +93,73 @@ const contact = 'https://formspree.io/f/xdeaqlnb';
         receive, the way you already require any other standard of quality.</li>
     </ul>
 
-    <h3>Services for adopting <span class="wm">talaia</span></h3>
-    <ul class="co-cards">
-      <li><strong>Training</strong> For everyone who works with AI, not only engineers:
-        why the person stays above the tool, how to brief it, how to read what comes
-        back, and when not to sign. For those who own an automation, how to answer for
-        a system.</li>
-      <li><strong>Audit</strong> An independent reading of where you stand today: where
-        AI is used, who is in charge of each use, which work carries a signature, which
-        does not, and what stands in the way.</li>
-      <li><strong>Consulting</strong> The framework fitted to how you already work
-        (your processes, your tools, your definition of done) and a clear line on what
-        is handed to the machine and what is not. Nothing you have is replaced.</li>
-      <li><strong>Official certification</strong> The standard is open
-        and free: any company can adopt <span class="wm">talaia</span> and say so, on its
-        own word. Official certification is ours: <span class="wm">talaia</span> checks how
-        the company works (where it uses AI, who is in charge of each use, how the work
-        is signed) and puts its name behind the result, so that your customers do not
-        have to take your word for it.</li>
-    </ul>
+    <section class="co-offer">
+      <p class="co-over">Services</p>
+      <h3>We help you adopt it, or we build it for you.</h3>
 
-    <h3>Engineering services</h3>
-    <p>Beyond <span class="wm">talaia</span> itself, we build, the way the standard asks:
-      the design written before the first line, a person in charge of every use of AI,
-      and the work read in full and signed before it is handed over.</p>
-    <ul class="co-cards">
-      <li><strong>AI projects</strong> Agents, automations, document and data pipelines,
-        put to work inside your business, each with a person in your company in charge of
-        it who can explain how it works. Where AI is not the right tool, we say so.</li>
-      <li><strong>Software engineering</strong> Products and platforms built and
-        maintained with AI-assisted engineering: designed by people, built inside
-        written rules, and understood by those who will answer for them.</li>
-      <li><strong>Process optimization</strong> Your processes reviewed end to end: what
-        to automate, what to hand to AI, what to leave as it is, and who stays in charge
-        of each step.</li>
-      <li><strong>Forward deployed engineers</strong> Our engineers inside your teams,
-        working in your own repositories, pipelines and processes, the 
-        <span class="wm"> talaia</span> way, until it runs without us.</li>
-    </ul>
+      <h4 class="co-group">Adopting <span class="wm">talaia</span></h4>
+      <ul class="co-grid co-3">
+        <li><strong class="co-name">Training</strong>
+          <span class="co-hook">Teams that get more from AI, and know where it stops.</span>
+          <span>For every role, not only engineers.</span></li>
+        <li><strong class="co-name">Audit</strong>
+          <span class="co-hook">Know where you stand before anyone asks.</span>
+          <span>Every use of AI mapped: who owns it, what is signed, what is not.</span></li>
+        <li><strong class="co-name">Consulting</strong>
+          <span class="co-hook"><span class="wm">talaia</span>, fitted to how you already work.</span>
+          <span>Your processes, your tools. Nothing thrown away.</span></li>
+      </ul>
 
-    <div class="co-cta">
+      <h4 class="co-group">Engineering</h4>
+      <ul class="co-grid">
+        <li><strong class="co-name">AI projects</strong>
+          <span class="co-hook">Agents and automations that take real work off your plate.</span>
+          <span>And an honest no when AI is not the answer.</span></li>
+        <li><strong class="co-name">Software engineering</strong>
+          <span class="co-hook">Products built fast, owned by your team.</span>
+          <span>Designed by people, built inside written rules.</span></li>
+        <li><strong class="co-name">Process optimization</strong>
+          <span class="co-hook">Find where the time goes.</span>
+          <span>Automate what should be, with a person in charge of every step.</span></li>
+        <li><strong class="co-name">Forward deployed engineers</strong>
+          <span class="co-hook">Our engineers, inside your team.</span>
+          <span>Delivering with your people until it runs without us.</span></li>
+      </ul>
+    </section>
+
+    <section class="co-offer">
+      <p class="co-over">Products</p>
+      <h3>Proof you can show. Software that builds itself.</h3>
+
+      <div class="co-product">
+        <div>
+          <strong class="co-name">Official certification</strong>
+          <p class="co-hook">Proof, not promises.</p>
+          <p>Anyone can adopt the open standard on their own word. Official certification
+            puts our name behind yours: a seal your customers can check, in every tender
+            and every contract.</p>
+        </div>
+        <a class="btn" href="#contact">Get certified</a>
+      </div>
+
+      <div class="co-feature">
+        <p class="co-over"><span class="wm">aguait</span></p>
+        <h3>Software that builds itself.<br />People who answer for it.</h3>
+        <p class="co-kicker"><span class="wm">aguait</span> is automatic software development on the principles of <span class="wm">talaia</span>.
+          We set it up in your company.</p>
+        <ul class="co-points">
+          <li><strong>Your design</strong> You write the design once. <span class="wm">aguait</span> builds from it.</li>
+          <li><strong>On its own</strong> From design to finished change, no code typed.</li>
+          <li><strong>Signed</strong> Nothing ships without a name behind it.</li>
+          <li><strong>With you</strong> We install it, tune it and train who runs it.</li>
+        </ul>
+        <a class="btn btn-primary" href="#contact"><span>Get <span class="wm">aguait</span> for your company</span></a>
+      </div>
+    </section>
+
+    <div class="co-cta" id="contact">
       <h3>Bring <span class="wm">talaia</span> to your company</h3>
+      <p>Tell us where you are. We will show you where to start.</p>
       <form class="co-form" action={contact} method="POST">
         <label>Name <input name="name" autocomplete="name" /></label>
         <label>Company <input name="company" autocomplete="organization" /></label>
@@ -141,13 +167,16 @@ const contact = 'https://formspree.io/f/xdeaqlnb';
         <label>Service
           <select name="service">
             <option value="">Not sure yet</option>
-            <optgroup label="Adopting talaia">
+            <optgroup label="Products">
+              <option>Official certification</option>
+              <option>aguait</option>
+            </optgroup>
+            <optgroup label="Services: adopting talaia">
               <option>Training</option>
               <option>Audit</option>
               <option>Consulting</option>
-              <option>Official certification</option>
             </optgroup>
-            <optgroup label="Engineering services">
+            <optgroup label="Services: engineering">
               <option>AI projects</option>
               <option>Software engineering</option>
               <option>Process optimization</option>

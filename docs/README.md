@@ -379,11 +379,6 @@ turns. When none is left, the instrument starts Build on its own,
 without asking permission: the ask, what "done" means and every
 decision are already yours.
 
-Keep your brief. It is your evidence for clause (a) of the
-certificate (the AI helped, and the ask was yours) and the one part
-of the work that was yours from the first word. Where it helps,
-publish it beside the result.
-
 ### Build: the instrument works
 
 Nothing is decided here. The instrument works to the Brief, under
@@ -454,11 +449,9 @@ you decide when the loop ends, and the signature is that decision.
 
 Anyone can add the line without having read a word of the Build. No
 machine will catch it, and the framework does not pretend one will.
-What the line does is change what the work *is*: you declare that an
-AI helped and that you read the result, understood it and answer for
-it, and whoever receives the work reads it as yours (not the
-machine's, not a draft, not a proposal) and judges it as your work
-is judged.
+What the line changes is what the work *is*: whoever receives it
+reads it as yours (not the machine's, not a draft, not a proposal)
+and judges it as your work is judged.
 
 So assurance comes from the signer. The line does not check the
 work; it makes the work yours, and what carries your name you do
@@ -468,51 +461,18 @@ excuse.**
 
 The receiver's part is to trust the signature, and to ask;
 responsibility has always meant asking the one who signed. Why this
-and not that; where the figure comes from; what this part does; what
-would break it. Whoever read the work and made it their own can
-answer without the tool. Whoever signed without reading finds out
-what the signature meant. Four things make the asking possible:
-
-- **A name.** The certificate line: the address, and a person who
-  answers.
-- **The evidence.** The checks the work cites ran, and their output
-  is beside it.
-- **The size.** The work stays within what one reading can hold.
-- **The reading.** Rework and reverts, never throughput, tell
-  whether the Watch was real.
+and not that; what would break it. Whoever read the work and made
+it their own can answer without the tool. Whoever signed without
+reading finds out what the signature meant. 
 
 # In practice
-## The instrument's rules
-
-The framework is applied in two places, and nowhere else. The first
-is the person's own discipline: write the design and the brief in
-your words, read the work in full, sign only what you can answer
-for. No tool
-enforces that part; it is the habit the certificate names. The
-second is the instrument: the rules (the Design it reads and never
-changes on its own, Brief, Build, the refusal to sign) written into the instructions the agent reads on
-every turn. Every agent takes such instructions, under one name or
-another: `AGENTS.md`, `CLAUDE.md`, a system prompt, a custom
-instructions field. The rules go there once, and the agent works
-inside them from then on.
-
-> [talaia.dev/agentsmd](https://talaia.dev/agentsmd)
-
-This is the one file that matters: the framework, as the agent reads
-it, kept in one place so that every copy says the same thing. Save it
-at the root of your repository. Where each tool reads it (Claude
-Code, Codex, Gemini, Cursor, Copilot, or a chat window) is at
-[talaia.dev/how-to-agentsmd](https://talaia.dev/how-to-agentsmd).
-
 ## Content and documents
 
-An article, a thread, an image; a report a manager will decide on.
-The Design is what holds across every piece: the line, the house
-style, what is never published. It is written by you, once, and given to
-the assistant before the first ask. Brief and Build are the conversation with the assistant. The Watch
-is the document on your screen: you read the draft and keep the
-paragraphs you accept. The Sign is the line, added by hand. Under a
-post, as it is:
+An article, a post, a report. The Design is your rules for every
+piece: tone, style, what you never publish. Write it once and give it
+to the assistant first. Brief and Build are the conversation. The
+Watch is reading the draft and keeping only what you accept. The Sign
+is the line, added by hand. Under a post, as it is:
 
 ```text
 talaia.dev/certificate — John Doe
@@ -539,8 +499,21 @@ written by you, read by the agent on every turn, and committed and
 signed like any other change. The agent writes in them only at your
 dictation.
 
-Brief and Build are the conversation with the agent, under the
-rules in its instructions file. Watch and Sign are git:
+The rules for the agent go in the instructions file it reads on
+every turn. Every coding agent takes one, under one name or another
+(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`); the rules go there once, and
+the agent works inside them from then on.
+
+> [talaia.dev/agentsmd](https://talaia.dev/agentsmd)
+
+This is `AGENTS.md`: the framework written for the agent. It lives at
+one address, so every copy of it says the same thing. Save it at the
+root of the repository; each tool reads it from its own place
+(Claude Code, Codex, Gemini, Cursor, Copilot). How, for each one:
+[talaia.dev/how-to-agentsmd](https://talaia.dev/how-to-agentsmd).
+
+Brief and Build are the conversation with the agent, under those
+rules. Watch and Sign are git:
 
 - **Watch is the diff and the stage.** You read the change in your
   editor, hunk by hunk, and stage what you accept: staging is the
@@ -575,8 +548,7 @@ it.
 
 The forge can hold the gate. A check runs on every pull request and
 fails when a commit in it carries no `Signed-off-by:`; make it a
-required check and no signature means no merge, the DCO's lever,
-one level up.
+required check and no signature means no merge.
 
 > [talaia.dev/pr-check](https://talaia.dev/pr-check)
 

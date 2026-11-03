@@ -115,7 +115,7 @@ const tabs = [
         const el = id ? document.getElementById(id) : null;
         let tab = root.dataset.tab;
         if (!id) tab = 'manifesto';
-        else if (id === 'companies') tab = 'companies';
+        else if (id === 'companies' || (el && el.closest('#companies'))) tab = 'companies';
         else if (el && el.closest('.readme') && !el.closest('.footnotes'))
           tab = split && !(split.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING) ? 'teams' : 'manifesto';
         root.dataset.tab = tab;
