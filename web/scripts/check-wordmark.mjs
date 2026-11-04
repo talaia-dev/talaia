@@ -1,11 +1,11 @@
-// Checks the three home pages (dist/index.html, es/, ca/) after a build: every plain-text "talaia" in the
+// Checks the three home pages (dist/index.html, es.html, ca.html) after a build: every plain-text "talaia" in the
 // README body became the in-text wordmark, and nothing that must stay
 // literal was touched (code, domains, the GitHub path, headings).
 //   npm run check
 import { readFileSync } from 'node:fs';
 
 let wm = 0;
-for (const page of ['index.html', 'es/index.html', 'ca/index.html']) {
+for (const page of ['index.html', 'es.html', 'ca.html']) {
 const html = readFileSync(new URL(`../dist/${page}`, import.meta.url), 'utf8');
 const article = html.slice(html.indexOf('<article class="readme">'), html.indexOf('</article>'));
 const fail = (m) => { console.error(`check-wordmark: ${page}: ` + m); process.exitCode = 1; };

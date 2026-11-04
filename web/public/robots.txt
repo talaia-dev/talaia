@@ -1,0 +1,6 @@
+# Every crawler is welcome, search and AI alike (the Developer's
+# decision, 2026-11-04): talaia is an open standard meant to be found.
+User-agent: *
+Allow: /
+
+Sitemap: https://talaia.dev/sitemap-index.xml

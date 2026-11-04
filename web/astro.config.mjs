@@ -7,6 +7,10 @@ import towers from './src/lib/satteri-towers.mjs';
 export default defineConfig({
   site: 'https://talaia.dev',
   output: 'static',
+  // No trailing slash, the Developer's choice: `about.html` files, which
+  // Cloudflare Pages serves at `/about` (a directory would 308 to `/about/`).
+  trailingSlash: 'never',
+  build: { format: 'file' },
   // English at `/`, the translations at `/es/` and `/ca/`.
   i18n: { defaultLocale: 'en', locales: ['en', 'es', 'ca'], routing: { prefixDefaultLocale: false } },
   // The two files the standard hands out live in git, not on the site:

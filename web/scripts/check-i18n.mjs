@@ -1,7 +1,7 @@
 // Checks dist/ after a build: one page per language, each rendering
 // only its own README (English when the translation is missing), and
-// the English-only pages (certificate, llms.txt) reading only the
-// English README.
+// the English-only certificate and the English llms-full.txt reading only
+// the English README (the translated llms.txt: check-seo.mjs).
 //   npm run check
 import { existsSync, readFileSync } from 'node:fs';
 
@@ -10,7 +10,7 @@ const fail = (m) => { console.error('check-i18n: ' + m); process.exitCode = 1; }
 const parts = (md) => (md.replace(/^```[\s\S]*?^```/gm, '').match(/^# /gm) || []).length;
 
 const en = read('../../docs/README.md');
-for (const [lang, page] of [['en', 'index.html'], ['es', 'es/index.html'], ['ca', 'ca/index.html']]) {
+for (const [lang, page] of [['en', 'index.html'], ['es', 'es.html'], ['ca', 'ca.html']]) {
   const file = new URL(`../dist/${page}`, import.meta.url);
   if (!existsSync(file)) { fail(`dist/${page} missing`); continue; }
   const html = readFileSync(file, 'utf8');
@@ -31,10 +31,10 @@ for (const [lang, page] of [['en', 'index.html'], ['es', 'es/index.html'], ['ca'
     if (!new RegExp(`<option value="${l}"[^>]*data-href=`).test(html)) fail(`dist/${page}: language option ${l} has no target`);
 }
 
-const llms = read('../dist/llms.txt');
-if (parts(llms) !== parts(en) + 1) fail(`llms.txt: ${parts(llms) - 1} parts, the English README has ${parts(en)}`);
-const cert = read('../dist/certificate/index.html');
+const llms = read('../dist/llms-full.txt');
+if (parts(llms) !== parts(en) + 2) fail(`llms-full.txt: ${parts(llms) - 2} parts (+ head + Companies), the English README has ${parts(en)}`);
+const cert = read('../dist/certificate.html');
 if ((cert.match(/<pre\b/g) || []).length !== 1) fail('certificate: expected exactly one <pre>');
 if (!cert.includes('<html lang="en"')) fail('certificate: not English');
 
-if (!process.exitCode) console.log('check-i18n: ok (en, es, ca; certificate and llms.txt English only)');
+if (!process.exitCode) console.log('check-i18n: ok (en, es, ca; certificate English only)');

@@ -12,6 +12,13 @@ const body = entries.map((e) => e.body ?? '').join('\n');
 const m = body.match(/^```txt\n([\s\S]*?)\n```/m);
 if (!m) throw new Error('certificate.astro: no ```txt fence (the certificate) found in the README');
 const text = m[1];
+// Structured data: the certificate as a versioned work, its text in full.
+const ld = {
+  '@context': 'https://schema.org', '@type': 'CreativeWork',
+  name: 'Certificate of Understanding', url: 'https://talaia.dev/certificate', inLanguage: 'en',
+  version: text.match(/^Version (\S+)/m)?.[1], text,
+  isPartOf: { '@type': 'WebSite', name: 'talaia', url: 'https://talaia.dev/' },
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -21,6 +28,7 @@ const text = m[1];
   <title>Certificate of Understanding · talaia</title>
   <meta name="description" content="The Certificate of Understanding: what a person certifies by adding talaia.dev/certificate and their name to work made with an AI." />
   <link rel="canonical" href="https://talaia.dev/certificate" />
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="talaia" />
   <meta property="og:title" content="Certificate of Understanding · talaia" />

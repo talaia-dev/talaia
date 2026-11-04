@@ -1,40 +1,33 @@
 ---
-// The home page in one language: hero, the README of that language
-// (English when it has none yet) and the Companies tab. `/`, `/es/`
-// and `/ca/` are each one line around this.
-import { getCollection, render } from 'astro:content';
+// The home page in one language: hero and the README of that language
+// (English when it has none yet); Companies is its own page
+// (CompaniesPage.astro). `/`, `/es` and `/ca` are each one line around this.
 import Base from '../layouts/Base.astro';
 import Logo from './Logo.astro';
 import Wordmark from './Wordmark.astro';
-import CompaniesEn from './companies/en.astro';
-import CompaniesEs from './companies/es.astro';
-import CompaniesCa from './companies/ca.astro';
-import { t, readmeFor, type Lang } from '../i18n/ui';
+import { t, companiesPath, type Lang } from '../i18n/ui';
+import { readmeOf } from '../lib/readme';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 
-const entries = await getCollection('docs', ({ data }) => !data.draft);
-const readme = readmeFor(entries, lang);
-const { Content, headings } = await render(readme);
-// The social card: each translated language has its own (scripts/og.sh).
-const card = readme.id === 'readme' ? 'og.png' : `og-${lang}.png`;
+const { readme, Content, headings, card, toc } = await readmeOf(lang);
 
-// Sidebar: one group per `#` part of the README (Manifesto, Framework,
-// Using talaia, Contributing), each listing its `##` sections. Derived
-// from the rendered headings, so renaming a section never breaks the
-// grouping; only a `##` before the first `#` would end up ungrouped.
-const toc = [] as { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
-for (const h of headings) {
-  if (h.slug === 'footnote-label') continue;   // the footnotes' own (hidden) h2, not a section
-  if (h.depth === 1) toc.push({ label: h.text, anchor: h.slug, items: [] });
-  else if (h.depth === 2 && toc.length) toc[toc.length - 1].items.push({ anchor: h.slug, title: h.text });
-}
-
-const companies = { en: CompaniesEn, es: CompaniesEs, ca: CompaniesCa } as Partial<Record<Lang, typeof CompaniesEn>>;
-const Companies = companies[lang] ?? CompaniesEn;
+// The two terms the standard defines, for search engines and LLMs: the
+// title of the README's second and third parts (Human-in-charge, the
+// Certificate of Understanding) and the first sentence under their first
+// `##`, read from this language's README so they never drift from it.
+const parts = (readme.body ?? '').replace(/^```[\s\S]*?^```/gm, '').split(/^# /m).slice(1);
+const h1s = headings.filter((h) => h.depth === 1);
+const terms = [1, 2].map((i) => {
+  const [title, ...lines] = parts[i].split('\n');
+  const from = lines.findIndex((l) => l.startsWith('## ')) + 1;
+  const para = lines.slice(from).join('\n').trim().split(/\n\s*\n/)[0];
+  const text = para.replace(/\*/g, '').replace(/\s+/g, ' ');
+  return { name: title.trim(), description: text.match(/^.*?\.(?=\s|$)/)?.[0] ?? text, anchor: h1s[i].slug };
+});
 ---
-<Base lang={lang} title={t(lang, 'title')} description={t(lang, 'description')} card={card} toc={toc}>
+<Base lang={lang} title={t(lang, 'title')} description={t(lang, 'description')} card={card} toc={toc} terms={terms}>
   <header class="hero" slot="hero">
     <div class="hero-in">
       <div class="lockup"><Logo size={30} /><Wordmark /></div>
@@ -43,7 +36,7 @@ const Companies = companies[lang] ?? CompaniesEn;
       <p class="hero-cta">
         <a class="btn btn-primary" href={`#${toc[0]?.anchor}`}>{t(lang, 'hero.cta.manifesto')}</a>
         <a class="btn" href={`#${toc[4]?.anchor}`}>{t(lang, 'hero.cta.teams')}</a>
-        <a class="btn" href="#companies">{t(lang, 'hero.cta.companies')}</a>
+        <a class="btn" href={companiesPath[lang]}>{t(lang, 'hero.cta.companies')}</a>
       </p>
     </div>
   </header>
@@ -51,5 +44,4 @@ const Companies = companies[lang] ?? CompaniesEn;
   <article class="readme">
     <Content />
   </article>
-  <Companies />
 </Base>
