@@ -1,3 +1,5 @@
+**English** · [Español](es/README.md) · [Català](ca/README.md)
+
 # Manifesto
 
 ## Introduction
@@ -265,11 +267,11 @@ commit carries a signature. All of it is under
 
 A company can make the manifesto its own: its values held across
 the whole organization, so that people stay in charge of the work
-AI helps them make. The certificate is how that shows in each piece
-of work: it carries the name of a person who read it and answers for
-it. From there it travels outwards in both directions: delivered to
-customers as a seal on what the company hands over, and required of
-distributors for what the company receives.
+AI helps them make. The certificate is how that shows, and it goes in
+three directions: inside the company, every piece of work carries the
+name of a person who read it and answers for it; to customers, it is
+delivered as a seal on what the company hands over; and from
+distributors, it is required for what the company receives.
 
 See the [Companies](#companies) tab for the services we offer to
 help companies apply Talaia, and for other related services.

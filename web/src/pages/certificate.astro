@@ -6,7 +6,8 @@
 import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
-const entries = await getCollection('docs', ({ data }) => !data.draft);
+// English only: the translations do not carry the certificate's text.
+const entries = await getCollection('docs', ({ id, data }) => id === 'readme' && !data.draft);
 const body = entries.map((e) => e.body ?? '').join('\n');
 const m = body.match(/^```txt\n([\s\S]*?)\n```/m);
 if (!m) throw new Error('certificate.astro: no ```txt fence (the certificate) found in the README');

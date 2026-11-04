@@ -2,7 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async () => {
-  const entries = await getCollection('docs', ({ data }) => !data.draft);
+  // English only: the translations stay on the site.
+  const entries = await getCollection('docs', ({ id, data }) => id === 'readme' && !data.draft);
 
   const body = [
     '# talaia',

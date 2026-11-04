@@ -1,0 +1,55 @@
+---
+// The home page in one language: hero, the README of that language
+// (English when it has none yet) and the Companies tab. `/`, `/es/`
+// and `/ca/` are each one line around this.
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Logo from './Logo.astro';
+import Wordmark from './Wordmark.astro';
+import CompaniesEn from './companies/en.astro';
+import CompaniesEs from './companies/es.astro';
+import CompaniesCa from './companies/ca.astro';
+import { t, readmeFor, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const entries = await getCollection('docs', ({ data }) => !data.draft);
+const readme = readmeFor(entries, lang);
+const { Content, headings } = await render(readme);
+// The social card: each translated language has its own (scripts/og.sh).
+const card = readme.id === 'readme' ? 'og.png' : `og-${lang}.png`;
+
+// Sidebar: one group per `#` part of the README (Manifesto, Framework,
+// Using talaia, Contributing), each listing its `##` sections. Derived
+// from the rendered headings, so renaming a section never breaks the
+// grouping; only a `##` before the first `#` would end up ungrouped.
+const toc = [] as { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
+for (const h of headings) {
+  if (h.slug === 'footnote-label') continue;   // the footnotes' own (hidden) h2, not a section
+  if (h.depth === 1) toc.push({ label: h.text, anchor: h.slug, items: [] });
+  else if (h.depth === 2 && toc.length) toc[toc.length - 1].items.push({ anchor: h.slug, title: h.text });
+}
+
+const companies = { en: CompaniesEn, es: CompaniesEs, ca: CompaniesCa } as Partial<Record<Lang, typeof CompaniesEn>>;
+const Companies = companies[lang] ?? CompaniesEn;
+---
+<Base lang={lang} title={t(lang, 'title')} description={t(lang, 'description')} card={card} toc={toc}>
+  <header class="hero" slot="hero">
+    <div class="hero-in">
+      <div class="lockup"><Logo size={30} /><Wordmark /></div>
+      <h1 class="tagline">{t(lang, 'hero.tagline1')}<br />{t(lang, 'hero.tagline2')}</h1>
+      <p class="hero-sub">{t(lang, 'hero.sub')}</p>
+      <p class="hero-cta">
+        <a class="btn btn-primary" href={`#${toc[0]?.anchor}`}>{t(lang, 'hero.cta.manifesto')}</a>
+        <a class="btn" href={`#${toc[4]?.anchor}`}>{t(lang, 'hero.cta.teams')}</a>
+        <a class="btn" href="#companies">{t(lang, 'hero.cta.companies')}</a>
+      </p>
+    </div>
+  </header>
+
+  <article class="readme">
+    <Content />
+  </article>
+  <Companies />
+</Base>

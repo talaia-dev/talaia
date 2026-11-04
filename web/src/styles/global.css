@@ -6,17 +6,17 @@
    choice, not the default: the same page in the navy. */
 :root {
   --navy: #1a2238; --cream: #faf6ef; --fire: #e8a33d;
-  --bg: #ffffff; --bg-alt: #f4f5f7; --fg: #343a46; --fg-dim: #66707f;
-  --fg-strong: #14192a; --accent: #1a2238; --accent-hover: #2e3a5c;
-  --border: #e2e5ea; --border-strong: #c4c9d2;
+  --bg: #f7f8fa; --bg-alt: #eef0f4; --fg: #3a4150; --fg-dim: #5f6978;
+  --fg-strong: #1f2638; --accent: #1a2238; --accent-hover: #2e3a5c;
+  --border: #dde1e8; --border-strong: #c4c9d2;
   --sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --measure: 66ch;
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: #161c2e; --bg-alt: #1f2740; --fg: #c5cad6; --fg-dim: #8a92a6;
-  --fg-strong: #f3f4f7; --accent: #c9d2ec; --accent-hover: #ffffff;
+  --bg: #1c2336; --bg-alt: #252e47; --fg: #b9bfcc; --fg-dim: #949cb0;
+  --fg-strong: #e3e6ee; --accent: #c9d2ec; --accent-hover: #e3e6ee;
   --border: #2b3450; --border-strong: #3f4a6a;
   color-scheme: dark;
 }
@@ -270,10 +270,15 @@ body {
   padding-top: 2.4rem; margin: 4.5rem 0 1.3rem; scroll-margin-top: 1.5rem;
   counter-increment: part; }
 .readme h1::before { content: counter(part); margin-right: .55em; color: var(--fg-dim); font-weight: 500; }
+/* The first part opens the page right under the hero: no gap, no hairline. */
+.readme > h1:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
 .readme h1 + h2 { margin-top: 1.4rem; }
 /* "Introduction" headings exist for the index only: present in the flow
    (so the anchor scrolls to the right place), invisible on the page. */
-.readme h2[id^="introduction"] { position: absolute; width: 1px; height: 1px;
+/* The README's language line ("English · Español") is for GitHub; the
+   site has the language menu. */
+.readme > p:first-child:has(> a[href$="README.md"]) { display: none; }
+.readme h2[id^="introduc"] { position: absolute; width: 1px; height: 1px;
   margin: 0; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .readme ul, .readme ol { padding-left: 1.5em; }
 .readme li { margin: .3em 0; }
@@ -416,6 +421,6 @@ sup a[data-footnote-ref] { text-decoration: none; font-weight: 600; }
   .hero .tagline, .hero .lockup { color: #111; }
   .shell { display: block; padding: 0; }
   body { background: #fff; color: #111; }
-  .readme h2[id^="introduction"] { position: static; width: auto; height: auto; clip: auto; }
+  .readme h2[id^="introduc"] { position: static; width: auto; height: auto; clip: auto; }
   a { color: inherit; text-decoration: underline; }
 }

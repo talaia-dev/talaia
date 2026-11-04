@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "check": "node scripts/check-wordmark.mjs",
+    "check": "node scripts/check-wordmark.mjs && node scripts/check-i18n.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
