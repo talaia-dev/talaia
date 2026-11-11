@@ -1,0 +1,47 @@
+---
+// The home page in one language: hero and the README of that language
+// (English when it has none yet); Companies is its own page
+// (CompaniesPage.astro). `/`, `/es` and `/ca` are each one line around this.
+import Base from '../layouts/Base.astro';
+import Logo from './Logo.astro';
+import Wordmark from './Wordmark.astro';
+import { t, companiesPath, type Lang } from '../i18n/ui';
+import { readmeOf } from '../lib/readme';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+const { readme, Content, headings, card, toc } = await readmeOf(lang);
+
+// The two terms the standard defines, for search engines and LLMs: the
+// title of the README's second and third parts (Human-in-charge, the
+// Certificate of Understanding) and the first sentence under their first
+// `##`, read from this language's README so they never drift from it.
+const parts = (readme.body ?? '').replace(/^```[\s\S]*?^```/gm, '').split(/^# /m).slice(1);
+const h1s = headings.filter((h) => h.depth === 1);
+const terms = [1, 2].map((i) => {
+  const [title, ...lines] = parts[i].split('\n');
+  const from = lines.findIndex((l) => l.startsWith('## ')) + 1;
+  const para = lines.slice(from).join('\n').trim().split(/\n\s*\n/)[0];
+  const text = para.replace(/\*/g, '').replace(/\s+/g, ' ');
+  return { name: title.trim(), description: text.match(/^.*?\.(?=\s|$)/)?.[0] ?? text, anchor: h1s[i].slug };
+});
+---
+<Base lang={lang} title={t(lang, 'title')} description={t(lang, 'description')} card={card} toc={toc} terms={terms}>
+  <header class="hero" slot="hero">
+    <div class="hero-in">
+      <div class="lockup"><Logo size={30} /><Wordmark /></div>
+      <h1 class="tagline">{t(lang, 'hero.tagline1')}<br />{t(lang, 'hero.tagline2')}</h1>
+      <p class="hero-sub">{t(lang, 'hero.sub')}</p>
+      <p class="hero-cta">
+        <a class="btn btn-primary" href={`#${toc[0]?.anchor}`}>{t(lang, 'hero.cta.manifesto')}</a>
+        <a class="btn" href={`#${toc[4]?.anchor}`}>{t(lang, 'hero.cta.teams')}</a>
+        <a class="btn" href={companiesPath[lang]}>{t(lang, 'hero.cta.companies')}</a>
+      </p>
+    </div>
+  </header>
+
+  <article class="readme">
+    <Content />
+  </article>
+</Base>

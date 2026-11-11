@@ -4,22 +4,51 @@ import '@fontsource/jetbrains-mono/400.css';
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
 import Wordmark from '../components/Wordmark.astro';
+import { langs, langNames, home, companiesPath, ogLocale, t, type Lang } from '../i18n/ui';
 interface Props {
+  lang: Lang;
   title: string;
+  card: string;
   description: string;
   toc: { label: string; anchor: string; items: { anchor: string; title: string }[] }[];
+  terms: { name: string; description: string; anchor: string }[];
+  /** Which page: the home page (README in three tabs) or Companies. */
+  page?: 'home' | 'companies';
+  /** This page's address in each language (hreflang, canonical, language menu). */
+  paths?: Record<Lang, string>;
 }
-const { title, description, toc } = Astro.props;
+const { lang, title, description, card, toc, terms, page = 'home', paths = { en: home('en'), es: home('es'), ca: home('ca') } } = Astro.props;
+const image = `https://talaia.dev/${card}`;
+const url = new URL(paths[lang], Astro.site).href;
+// Off the home page, links to the README's parts go back to it.
+const at = page === 'home' ? '' : home(lang);
+const llmsDir = lang === 'en' ? '/' : `/${lang}/`;
+// Structured data: the site in this language (the Companies page: a page
+// of it), who publishes it, and the terms the standard defines.
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', '@id': 'https://talaia.dev/#org', name: 'talaia', url: 'https://talaia.dev/',
+      logo: 'https://talaia.dev/apple-touch-icon.png', sameAs: ['https://github.com/talaia-dev/talaia'] },
+    page === 'home'
+      ? { '@type': 'WebSite', '@id': `${url}#site`, name: title, url, description, inLanguage: lang,
+          publisher: { '@id': 'https://talaia.dev/#org' } }
+      : { '@type': 'WebPage', name: title, url, description, inLanguage: lang,
+          isPartOf: { '@id': `${new URL(home(lang), Astro.site).href}#site` }, publisher: { '@id': 'https://talaia.dev/#org' } },
+    ...terms.map((d) => ({ '@type': 'DefinedTerm', name: d.name, description: d.description,
+      url: `${url}#${d.anchor}`, inLanguage: lang })),
+  ],
+};
 // The tabs: the first four `#` parts of the README (Manifesto, the
 // Certificate, Human-in-charge, Talaia) are the manifesto tab, the rest is the practice; each tab links to the first heading of its body.
 const tabs = [
-  { id: 'manifesto', label: 'Manifesto', anchor: toc[0]?.anchor },
-  { id: 'teams', label: 'Individuals and Teams', anchor: toc[4]?.anchor },
-  { id: 'companies', label: 'Companies', anchor: 'companies' },
+  { id: 'manifesto', label: t(lang, 'tab.manifesto'), anchor: toc[0]?.anchor },
+  { id: 'teams', label: t(lang, 'tab.teams'), anchor: toc[4]?.anchor },
+  { id: 'companies', label: t(lang, 'tab.companies'), href: companiesPath[lang] },
 ];
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang} data-page={page}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -29,7 +58,11 @@ const tabs = [
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="theme-color" content="#1a2238" />
-  <link rel="alternate" type="text/plain" href="/llms.txt" title="Markdown version" />
+  <link rel="canonical" href={url} />
+  <link rel="alternate" type="text/plain" href={`${llmsDir}llms.txt`} title="llms.txt" />
+  <link rel="alternate" type="text/plain" href={`${llmsDir}llms-full.txt`} title="Markdown version" />
+  {langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(paths[l], Astro.site).href} />)}
+  <link rel="alternate" hreflang="x-default" href={new URL(paths.en, Astro.site).href} />
   <!-- Go vanity import path: `go install talaia.dev/cmd/talaia@latest` asks
        https://talaia.dev/?go-get=1 and follows this to the repository. -->
   <meta name="go-import" content="talaia.dev git https://github.com/talaia-dev/talaia" />
@@ -37,41 +70,60 @@ const tabs = [
   <meta property="og:site_name" content="talaia" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site).href} />
-  <meta property="og:image" content="https://talaia.dev/og.png" />
-  <meta property="og:image:secure_url" content="https://talaia.dev/og.png" />
+  <meta property="og:url" content={url} />
+  <meta property="og:locale" content={ogLocale[lang]} />
+  {langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+  <meta property="og:image" content={image} />
+  <meta property="og:image:secure_url" content={image} />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="talaia — You direct. The AI builds. Your name answers for it." />
+  <meta property="og:image:alt" content={t(lang, 'og.alt')} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content="https://talaia.dev/og.png" />
-  <script is:inline>
+  <meta name="twitter:image" content={image} />
+  <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <script is:inline define:vars={{ tab: page === 'home' ? 'manifesto' : 'companies' }}>
     // Light by default, like a published standard; dark stays a choice.
     document.documentElement.dataset.theme = localStorage.getItem('theme') ?? 'light';
-    // The body opens on the manifesto; the script at the foot of the page
-    // moves to the tab an anchor belongs to.
-    document.documentElement.dataset.tab = location.hash === '#companies' ? 'companies' : 'manifesto';
+    // The home page opens on the manifesto; the script at the foot of the
+    // page moves to the tab an anchor belongs to. The Companies page is
+    // its own tab.
+    document.documentElement.dataset.tab = tab;
   </script>
+  {page === 'home' && <script is:inline define:vars={{ to: companiesPath[lang] }}>
+    // Companies left the home page for its own: the old anchors follow it.
+    if (location.hash === '#companies') location.replace(to);
+    else if (location.hash === '#contact') location.replace(to + '#contact');
+  </script>}
+  {lang === 'en' && <script is:inline define:vars={{ paths }}>
+    // An English page opens in the visitor's language: the one chosen in
+    // the language menu, else the first of the browser's that the site
+    // has. A deep link (`/#…`) is an English anchor and stays here.
+    try {
+      if (!location.hash) {
+        const have = ['en', 'es', 'ca'];
+        const want = localStorage.getItem('lang') ??
+          (navigator.languages || [navigator.language]).map((l) => l.slice(0, 2).toLowerCase()).find((l) => have.includes(l));
+        if (want && want !== 'en' && have.includes(want)) location.replace(paths[want]);
+      }
+    } catch {}
+  </script>}
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-in">
       <a class="brand" href="/"><Logo size={20} /><Wordmark /></a>
       <nav class="tabs" aria-label="Sections">
-        {tabs.map((t) => <a href={`#${t.anchor}`} data-tab={t.id}>{t.label}</a>)}
+        {tabs.map((t) => <a href={t.href ?? `${at}#${t.anchor}`} data-tab={t.id} aria-current={page === 'companies' && t.id === 'companies' ? 'true' : undefined}>{t.label}</a>)}
       </nav>
       <nav class="topnav" aria-label="Repository">
         <a href="https://github.com/talaia-dev/talaia">GitHub</a>
       </nav>
       <button id="theme-toggle" type="button" aria-label="Toggle light/dark theme">◐</button>
-      <!-- No effect yet: the translations come later. -->
       <select id="lang-select" aria-label="Language">
-        <option value="en" selected>English</option>
-        <option value="es">Español</option>
-        <option value="ca">Català</option>
+        {langs.map((l) => <option value={l} data-href={paths[l]} selected={l === lang}>{langNames[l]}</option>)}
       </select>
     </div>
   </header>
@@ -95,27 +147,28 @@ const tabs = [
         <p class="foot-line"><a href="/certificate">talaia.dev/certificate</a> — <a href="https://www.linkedin.com/in/roger-p%C3%A9rez-parera-1b1458119/">Roger Pérez</a></p>
         <nav class="foot-links" aria-label="Footer">
           <a href="https://github.com/talaia-dev/talaia">GitHub</a>
-          <a href="/llms.txt">llms.txt</a>
-          {toc.slice(0, 2).map((g) => <a href={`#${g.anchor}`}>{g.label}</a>)}
+          <a href={`${llmsDir}llms.txt`}>llms.txt</a>
+          <a href={`${llmsDir}llms-full.txt`}>llms-full.txt</a>
+          {toc.slice(0, 2).map((g) => <a href={`${at}#${g.anchor}`}>{g.label}</a>)}
         </nav>
       </footer>
     </main>
   </div>
   <script is:inline>
-    // Tabs: one page, three bodies. The anchor decides which one shows:
-    // none is the manifesto, #companies is Companies, and any other
-    // belongs to the tab its target sits in (before or after the
-    // README's fifth `#`). The footnotes show under both, so a note's
+    // Tabs: the home page has two bodies, the third tab is the Companies
+    // page. The anchor decides which body shows: none is the manifesto,
+    // and any other belongs to the tab its target sits in (before or
+    // after the README's fifth `#`). The footnotes show under both, so a note's
     // anchor keeps the tab that is open.
     (() => {
       const root = document.documentElement;
+      if (root.dataset.page !== 'home') return;   // the Companies page is one tab, set above
       const split = document.querySelector('.readme > h1:nth-of-type(5)');
       const show = () => {
         const id = decodeURIComponent(location.hash.slice(1));
         const el = id ? document.getElementById(id) : null;
         let tab = root.dataset.tab;
         if (!id) tab = 'manifesto';
-        else if (id === 'companies') tab = 'companies';
         else if (el && el.closest('.readme') && !el.closest('.footnotes'))
           tab = split && !(split.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_PRECEDING) ? 'teams' : 'manifesto';
         root.dataset.tab = tab;
@@ -160,6 +213,13 @@ const tabs = [
       const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
       document.documentElement.dataset.theme = next;
       localStorage.setItem('theme', next);
+    });
+    // The language menu remembers the choice, so `/` stops redirecting
+    // someone who picked English on a Spanish or Catalan browser.
+    document.getElementById('lang-select').addEventListener('change', (e) => {
+      const opt = e.target.selectedOptions[0];
+      try { localStorage.setItem('lang', opt.value); } catch {}
+      location.href = opt.dataset.href;
     });
   </script>
 </body>

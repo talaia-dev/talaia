@@ -6,17 +6,17 @@
    choice, not the default: the same page in the navy. */
 :root {
   --navy: #1a2238; --cream: #faf6ef; --fire: #e8a33d;
-  --bg: #ffffff; --bg-alt: #f4f5f7; --fg: #343a46; --fg-dim: #66707f;
-  --fg-strong: #14192a; --accent: #1a2238; --accent-hover: #2e3a5c;
-  --border: #e2e5ea; --border-strong: #c4c9d2;
+  --bg: #f7f8fa; --bg-alt: #eef0f4; --fg: #3a4150; --fg-dim: #5f6978;
+  --fg-strong: #1f2638; --accent: #1a2238; --accent-hover: #2e3a5c;
+  --border: #dde1e8; --border-strong: #c4c9d2;
   --sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --measure: 66ch;
   color-scheme: light;
 }
 :root[data-theme='dark'] {
-  --bg: #161c2e; --bg-alt: #1f2740; --fg: #c5cad6; --fg-dim: #8a92a6;
-  --fg-strong: #f3f4f7; --accent: #c9d2ec; --accent-hover: #ffffff;
+  --bg: #1c2336; --bg-alt: #252e47; --fg: #b9bfcc; --fg-dim: #949cb0;
+  --fg-strong: #e3e6ee; --accent: #c9d2ec; --accent-hover: #e3e6ee;
   --border: #2b3450; --border-strong: #3f4a6a;
   color-scheme: dark;
 }
@@ -162,11 +162,89 @@ body {
   border-radius: 4px; background: var(--bg-alt); }
 .co-rows strong, .co-cards strong { display: block; font-weight: 600; font-size: 1.02rem;
   color: var(--fg-strong); margin-bottom: .35rem; }
+/* The offer: each service block opens with an overline, a short claim
+   and a one-line kicker; cards are numbered, ruled in the navy, and lift
+   on hover. aguait is the featured band, in the navy like the hero. */
+.co-offer { margin-top: 4.5rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+.co-offer h3, .co-feature h3 { border: 0; padding: 0; margin: .6rem 0 .5rem;
+  font-size: 2.05rem; line-height: 1.15; letter-spacing: -.02em; max-width: 24ch; }
+.co-kicker { font-size: 1.2rem; line-height: 1.45; color: var(--fg-dim); margin: 0; }
+.co-grid { list-style: none; padding: 0; margin: 2rem 0 0; counter-reset: card;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.co-grid > li { counter-increment: card; display: flex; flex-direction: column; gap: .55rem;
+  padding: 1.3rem 1.25rem 1.4rem; background: var(--bg); border: 1px solid var(--border);
+  border-top: 3px solid var(--accent); border-radius: 4px; color: var(--fg-dim);
+  font-size: .95rem; line-height: 1.45;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.co-grid > li:hover { transform: translateY(-3px); border-color: var(--border-strong);
+  border-top-color: var(--accent); box-shadow: 0 10px 28px -14px rgba(26,34,56,.35); }
+.co-3 { grid-template-columns: repeat(3, 1fr); }
+.co-group { margin: 2.6rem 0 0; font-size: 11.5px; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--fg-dim); }
+.co-group .wm { color: inherit; }
+.co-grid .co-name, .co-product .co-name { display: block; font-weight: 650; font-size: 1.5rem;
+  line-height: 1.15; letter-spacing: -.02em; color: var(--fg-strong); margin: 0;
+  font-variation-settings: "opsz" 32; }
+.co-hook { font-weight: 500; font-size: 1.02rem; line-height: 1.4; color: var(--fg-strong); }
+.co-product { margin-top: 2rem; padding: 1.8rem 2rem; border: 1px solid var(--border-strong);
+  border-left: 4px solid var(--accent); border-radius: 4px; background: var(--bg-alt);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem 2rem; }
+.co-product > div { flex: 1 1 32rem; }
+.co-product .co-name { font-size: 1.9rem; }
+.co-product p { margin: .4rem 0 0; color: var(--fg-dim); max-width: 60ch; }
+.co-product p.co-hook { font-size: 1.2rem; color: var(--fg-strong); }
+.co-product .btn, :root[data-theme='dark'] .co-product .btn { color: var(--accent); border-color: var(--accent); }
+.co-product .btn:hover { background: var(--accent); color: var(--bg); }
+.co-feature { margin-top: 1.2rem; padding: 3.2rem 2.6rem 3rem; border-radius: 4px;
+  background: var(--navy); color: rgba(250,246,239,.78); }
+.co-feature .co-over { color: rgba(250,246,239,.6); }
+.co-feature h3 { color: #fff; font-size: 2.5rem; max-width: none; }
+.co-feature .co-kicker { color: rgba(250,246,239,.78); max-width: 52ch; }
+.co-feature .wm { color: inherit; }
+/* aguait's own mark: the wordmark, large, as the band's opening line. */
+.co-feature .co-over .wm { display: inline-block; text-transform: none; letter-spacing: -.02em;
+  font-size: 1.7rem; font-weight: 700; color: #fff; }
+:root[data-theme='dark'] .co-feature .co-over .wm { color: var(--navy); }
+.co-points { list-style: none; padding: 0; margin: 2.2rem 0 2.4rem;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.6rem; }
+.co-points > li { border-top: 1px solid rgba(250,246,239,.28); padding-top: .9rem;
+  font-size: .95rem; line-height: 1.45; }
+.co-points strong { display: block; color: #fff; font-weight: 600; font-size: 1.05rem;
+  margin-bottom: .3rem; }
+:root[data-theme='dark'] .co-feature { background: var(--cream); color: rgba(26,34,56,.75); }
+:root[data-theme='dark'] .co-feature h3, :root[data-theme='dark'] .co-points strong { color: var(--navy); }
+:root[data-theme='dark'] .co-feature .co-over,
+:root[data-theme='dark'] .co-feature .co-kicker { color: rgba(26,34,56,.7); }
+:root[data-theme='dark'] .co-points > li { border-top-color: rgba(26,34,56,.25); }
+#contact { scroll-margin-top: 4.6rem; }
+.co-cta > p { flex-basis: 100%; margin: -.4rem 0 .4rem; }
+@media (max-width: 1000px) { .co-grid, .co-3, .co-points { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) {
+  .co-grid, .co-3, .co-points { grid-template-columns: 1fr; }
+  .co-offer h3 { font-size: 1.7rem; }
+  .co-feature { padding: 2.2rem 1.3rem 2.2rem; }
+  .co-feature h3 { font-size: 1.9rem; }
+}
+@media (prefers-reduced-motion: reduce) { .co-grid > li { transition: none; } .co-grid > li:hover { transform: none; } }
 .co-cta { margin-top: 3.4rem; padding: 2rem 2rem 2.1rem; border-radius: 4px;
-  background: var(--navy); color: #fff; }
-.co-cta h3 { border: 0; padding: 0; margin: 0 0 .5rem; color: #fff; }
+  background: var(--navy); color: #fff;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 1.5rem; }
+.co-cta h3 { border: 0; padding: 0; margin: 0; color: #fff; }
 .co-cta .wm { color: inherit; }
 .co-cta p { margin: 0 0 1.4rem; color: rgba(250,246,239,.74); }
+/* The contact form, inside the band: fields take the band's ink, so the
+   same rules serve the navy band and the cream one in dark. */
+.co-form { flex-basis: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem 1rem; }
+.co-form label { display: grid; gap: .35rem; font-size: 13.5px; font-weight: 600; }
+.co-form .wide, .co-send { grid-column: 1 / -1; }
+.co-form input, .co-form select, .co-form textarea { font: inherit; font-size: 1rem; font-weight: 400;
+  color: inherit; background: transparent; border-radius: 4px; padding: .55rem .7rem;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent); }
+.co-form textarea { resize: vertical; }
+.co-form option, .co-form optgroup { color: var(--navy); background: #fff; }
+.co-send { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem 1.2rem; }
+.co-send button:disabled { opacity: .6; cursor: progress; }
+.co-cta .co-status { margin: 0; color: inherit; }
 
 .readme { counter-reset: part; }
 .readme > :first-child { margin-top: 0; }
@@ -192,10 +270,15 @@ body {
   padding-top: 2.4rem; margin: 4.5rem 0 1.3rem; scroll-margin-top: 1.5rem;
   counter-increment: part; }
 .readme h1::before { content: counter(part); margin-right: .55em; color: var(--fg-dim); font-weight: 500; }
+/* The first part opens the page right under the hero: no gap, no hairline. */
+.readme > h1:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
 .readme h1 + h2 { margin-top: 1.4rem; }
 /* "Introduction" headings exist for the index only: present in the flow
    (so the anchor scrolls to the right place), invisible on the page. */
-.readme h2[id^="introduction"] { position: absolute; width: 1px; height: 1px;
+/* The README's language line ("English · Español") is for GitHub; the
+   site has the language menu. */
+.readme > p:first-child:has(> a[href$="README.md"]) { display: none; }
+.readme h2[id^="introduc"] { position: absolute; width: 1px; height: 1px;
   margin: 0; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .readme ul, .readme ol { padding-left: 1.5em; }
 .readme li { margin: .3em 0; }
@@ -311,6 +394,7 @@ th strong { color: var(--fg-strong); font-weight: 600; }
   .co-rows, .co-cards { grid-template-columns: 1fr; }
   .co-title { font-size: 1.75rem; }
   .co-cta { padding: 1.5rem 1.2rem 1.6rem; }
+  .co-form { grid-template-columns: 1fr; }
   .topbar-in { flex-wrap: wrap; row-gap: .6rem; padding: .7rem 1.1rem; }
   .tabs { order: 3; width: 100%; overflow-x: auto; }
   #theme-toggle { margin-left: auto; }
@@ -337,6 +421,6 @@ sup a[data-footnote-ref] { text-decoration: none; font-weight: 600; }
   .hero .tagline, .hero .lockup { color: #111; }
   .shell { display: block; padding: 0; }
   body { background: #fff; color: #111; }
-  .readme h2[id^="introduction"] { position: static; width: auto; height: auto; clip: auto; }
+  .readme h2[id^="introduc"] { position: static; width: auto; height: auto; clip: auto; }
   a { color: inherit; text-decoration: underline; }
 }

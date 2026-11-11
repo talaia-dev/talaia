@@ -6,7 +6,9 @@
 // script), and the CSS animates the towers as it opens. The text keeps
 // the ordinary body voice; the frame does the marking. The markdown
 // stays plain: the paragraph is found by its opening words.
-const OPENING = 'Two kinds of tower';
+// One opening per language (docs/README.md and its translations), each
+// with the figure's label in that language.
+const OPENINGS = { 'Two kinds of tower': 'The two towers', 'Dos tipos de torre': 'Las dos torres', 'Dos tipus de torre': 'Les dues torres' };
 
 const FIGURE = `<figure aria-hidden="true">
 <svg viewBox="0 0 250 78" width="250" height="78">
@@ -32,9 +34,10 @@ export default function towersPlugin() {
     element: {
       filter: ['p'],
       visit(node, ctx) {
-        if (!ctx.textContent(node).startsWith(OPENING)) return;
+        const opening = Object.keys(OPENINGS).find((o) => ctx.textContent(node).startsWith(o));
+        if (!opening) return;
         const text = { ...node, properties: { ...node.properties, className: ['towers-text'] } };
-        const summary = { type: 'element', tagName: 'summary', properties: { ariaLabel: 'The two towers' },
+        const summary = { type: 'element', tagName: 'summary', properties: { ariaLabel: OPENINGS[opening] },
           children: [{ type: 'raw', value: FIGURE }] };
         ctx.replaceNode(node, { type: 'element', tagName: 'details', properties: { className: ['towers'] },
           children: [summary, text] });

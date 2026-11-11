@@ -1,0 +1,48 @@
+---
+// The social card in one language: rendered at 1200×630 and captured by
+// scripts/og.sh to public/og.png (English) or public/og-<lang>.png.
+// Its pages (/og-card, /<lang>/og-card) are linked nowhere and excluded
+// from the sitemap.
+import '@fontsource-variable/inter/opsz.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+import Logo from './Logo.astro';
+import Wordmark from './Wordmark.astro';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex" />
+  <title>talaia · social card</title>
+  <style>
+    html, body { margin: 0; background: #1a2238; overflow: hidden; }
+    .card { width: 1200px; height: 630px; position: relative; overflow: hidden;
+      background: #1a2238; color: #fff; font-family: var(--sans); }
+    .inner { position: absolute; inset: 0; padding: 76px 88px 68px; display: flex; flex-direction: column; justify-content: space-between; }
+    .brand { display: flex; align-items: baseline; gap: 16px; font-weight: 600; font-size: 40px; letter-spacing: -.01em; line-height: 1; color: #fff; }
+    .logo-mark { color: #faf6ef; height: 40px; width: auto; }
+    .status { margin: 18px 0 0; font-size: 16px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(250,246,239,.6); }
+    .tagline { font-weight: 600; font-size: 62px; line-height: 1.1; letter-spacing: -.02em; max-width: 26ch; margin: 0; color: #fff;
+      font-variation-settings: "opsz" 32; }
+    .sub { margin: 0; font-size: 24px; color: rgba(250,246,239,.7); max-width: 44ch; line-height: 1.4; }
+    .foot { font-size: 18px; color: rgba(250,246,239,.6); }
+  </style>
+</head>
+<body>
+  <div class="card"><div class="inner">
+    <div>
+      <div class="brand"><Logo size={40} /><Wordmark /></div>
+    </div>
+    <div>
+      <p class="tagline">{t(lang, 'hero.tagline1')}<br />{t(lang, 'hero.tagline2')}</p>
+      <p class="sub" style="margin-top:22px">{t(lang, 'og.sub')}</p>
+    </div>
+    <div class="foot">{t(lang, 'og.foot')}</div>
+  </div></div>
+</body>
+</html>

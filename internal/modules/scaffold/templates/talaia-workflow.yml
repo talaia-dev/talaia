@@ -6,6 +6,8 @@
 # becomes mechanical: no signature, no merge.
 name: talaia
 on: pull_request
+permissions:
+  contents: read
 jobs:
   audit:
     runs-on: ubuntu-latest

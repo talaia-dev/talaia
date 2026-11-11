@@ -113,8 +113,8 @@
   exists** (2026-09-02): `action.yml` at the repo root — composite
   GitHub Action, `uses: talaia-dev/talaia@<ref>`, builds the binary
   from `github.action_path` with setup-go and runs `audit --strict`
-  on the PR's base..head — plus `.github/workflows/ci.yml` (Go test/
-  vet/fmt on push+PR; the audit check on PRs, dogfooding). As a local
+  on the PR's base..head — plus `.github/workflows/talaia.yml`, the
+  same workflow `init` installs (the audit check on PRs, dogfooding). As a local
   report audit stays thin on purpose. Do NOT build review UIs,
   boards, portals or approval steps — review tools (CodeRabbit et
   al.) scale the reading and are named as complements in the README;

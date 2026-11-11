@@ -1,0 +1,23 @@
+---
+// The Companies page in one language: the section the home page's third
+// tab used to hold, now at its own address (companiesPath) so it has a
+// title, a description and a canonical of its own. `/companies`,
+// `/es/empresas` and `/ca/empreses` are each one line around this.
+import Base from '../layouts/Base.astro';
+import CompaniesEn from './companies/en.astro';
+import CompaniesEs from './companies/es.astro';
+import CompaniesCa from './companies/ca.astro';
+import { t, companiesPath, type Lang } from '../i18n/ui';
+import { readmeOf } from '../lib/readme';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+// the README's index: the tabs and the footer link back to its parts
+const { card, toc } = await readmeOf(lang);
+const companies = { en: CompaniesEn, es: CompaniesEs, ca: CompaniesCa } as Partial<Record<Lang, typeof CompaniesEn>>;
+const Companies = companies[lang] ?? CompaniesEn;
+---
+<Base lang={lang} page="companies" paths={companiesPath} title={t(lang, 'companies.title')} description={t(lang, 'companies.description')} card={card} toc={toc} terms={[]}>
+  <Companies />
+</Base>

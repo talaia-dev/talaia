@@ -154,6 +154,7 @@ func TestWorkflowInstallsTheAuditCheck(t *testing.T) {
 	wf := string(data)
 	for _, want := range []string{
 		"on: pull_request",
+		"permissions:\n  contents: read",
 		"uses: talaia-dev/talaia@",
 		"fetch-depth: 0",
 	} {
